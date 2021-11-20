@@ -1,8 +1,8 @@
 import nodemailer from 'nodemailer';
 
-export async function sendMail(email) {
-    let testAccount = await nodemailer.createTestAccount();
-    let transporter = nodemailer.createTransport({
+export async function sendOTPMail(email, digits) {
+    const testAccount = await nodemailer.createTestAccount();
+    const transporter = nodemailer.createTransport({
         host: "smtp.ethereal.email",
         port: 587,
         secure: false, // true for 465, false for other ports
@@ -13,12 +13,12 @@ export async function sendMail(email) {
     });
 
     try {
-        let info = await transporter.sendMail({
+        const info = await transporter.sendMail({
             from: '"Secret Friend 👻" <secret.friend@example.com>', // sender address
             to: email, // list of receivers
-            subject: "Hello ✔", // Subject line
-            text: "Hello world?", // plain text body
-            html: "<b>Hello world?</b>", // html body
+            subject: "Secret Friend: Your log in code", // Subject line
+            text: `Hi there,\n\nhere is your log in code:\n\n${digits}\n\n\nGreetings!`, // plain text body
+            html: `Hi there,<br><br>here is your log in code:<br><br><b>${digits}</b><br><br><br>Greetings!`, // html body
         });
 
         console.log("Message sent: %s", info.messageId);

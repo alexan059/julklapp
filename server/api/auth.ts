@@ -1,10 +1,10 @@
-import { IncomingMessage, ServerResponse } from 'http';
+import { ServerResponse } from 'http';
 import { SessionRequest } from '~/types';
-import { Session } from 'express-session';
 import { useBody, sendError, createError } from 'h3';
 
-import { createUser } from '~/server/queries/users';
-import { generateOTP, verifyOTP } from '~/server/queries/otp';
+import { createUser, getUser } from '~/server/queries/user';
+import { generateOTP, verifyOTP } from '~/server/services/otp';
+import { sendOTPMail } from '~/server/services/mailer';
 
 export default async (req: SessionRequest, res: ServerResponse) => {
 
@@ -13,14 +13,21 @@ export default async (req: SessionRequest, res: ServerResponse) => {
     }
 
     const { email } = await useBody(req);
+    const user = await getUser(email);
 
-    console.log(req.session);
+    if (!user) {
+        await createUser(email);
+    }
+
+    const { digits, expires } = await generateOTP(email);
+    await sendOTPMail(email, digits);
+
+    // console.log(user);
+    // console.log(req.session.id);
 
     if (!email) {
         return sendError(res, createError({ statusCode: 400 }));
     }
-
-    console.log(email);
 
     // await createUser(email); // 5520
     // const { digits, expires } = await generateOTP(email);
@@ -28,9 +35,5 @@ export default async (req: SessionRequest, res: ServerResponse) => {
     // const result = await verifyOTP(email, 2172);
     // console.log(result);
 
-
-
-    res.end(JSON.stringify({ email }));
-
-
+    res.end(JSON.stringify({ email, expires }));
 }
