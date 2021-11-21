@@ -4,9 +4,15 @@ import { sendRedirect, useQuery } from 'h3';
 import { matchPath, usePath } from '~/server/helpers/server';
 
 export default async function (req: SessionRequest, res: ServerResponse) {
-    if (req.session.loggedIn) {
+    console.log(req.session.loggedIn);
 
-    } else if (req.url !== '/login') {
-        // await sendRedirect(res, '/login');
-    }
+    // if (matchPath(req, '/logout')) {
+    //
+    // }
+
+    // if (req.session.loggedIn) {
+    //
+    // } else if (req.url !== '/login') {
+    //     // await sendRedirect(res, '/login');
+    // }
 }

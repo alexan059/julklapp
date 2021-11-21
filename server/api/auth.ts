@@ -5,35 +5,44 @@ import { useBody, sendError, createError } from 'h3';
 import { createUser, getUser } from '~/server/queries/user';
 import { generateOTP, verifyOTP } from '~/server/services/otp';
 import { sendOTPMail } from '~/server/services/mailer';
+import { resetOTP } from '~/server/queries/otp';
 
 export default async (req: SessionRequest, res: ServerResponse) => {
+
+    // await new Promise(resolve => setTimeout(() => resolve(), 1000));
 
     if (req.method !== 'POST') {
         return sendError(res, createError({ statusCode: 404 }));
     }
 
-    const { email } = await useBody(req);
+    const { email, otp } = await useBody(req);
+
+    if (!email) {
+        return sendError(res, createError({ statusCode: 400 }));
+    }
+
     const user = await getUser(email);
 
     if (!user) {
         await createUser(email);
     }
 
-    const { digits, expires } = await generateOTP(email);
-    await sendOTPMail(email, digits);
+    if (!otp) {
+        const { digits, expires } = await generateOTP(email);
+        if (!await sendOTPMail(email, digits)) {
+            return sendError(res, createError({ statusCode: 500 }));
+        }
 
-    // console.log(user);
-    // console.log(req.session.id);
-
-    if (!email) {
-        return sendError(res, createError({ statusCode: 400 }));
+        return res.end(JSON.stringify({ expires, success: true }));
     }
 
-    // await createUser(email); // 5520
-    // const { digits, expires } = await generateOTP(email);
-    // console.log(otp);
-    // const result = await verifyOTP(email, 2172);
-    // console.log(result);
+    if (!await verifyOTP(email, otp)) {
+        return sendError(res, createError({ statusCode: 401 }));
+    }
 
-    res.end(JSON.stringify({ email, expires }));
+    await resetOTP(email);
+
+    req.session.loggedIn = true;
+
+    return res.end(JSON.stringify({ success: true }));
 }

@@ -19,8 +19,6 @@ export async function getOTP(email): Promise<OTP> {
     try {
         const results = await pool.query('SELECT otp FROM users WHERE email = $1', [email]);
 
-        await resetOTP(email);
-
         if (results.rowCount <= 0) {
             throw new Error('email not found');
         }
@@ -29,6 +27,7 @@ export async function getOTP(email): Promise<OTP> {
         const { hash, expires } = JSON.parse(otp);
 
         if (Date.now() > expires) {
+            await resetOTP(email);
             throw new Error('timeout');
         }
 

@@ -1,6 +1,8 @@
 <template>
   <div class="digits">
     <input v-for="i in n"
+           :ref="addInputRef"
+           :disabled="disabled"
            :key="i"
            type="text"
            maxlength="1"
@@ -10,12 +12,29 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue';
+import { reactive, onBeforeUpdate } from 'vue';
 
 const props = defineProps({
   digits: {
     type: Number,
     default: 4,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+let inputs = [];
+const addInputRef = el => inputs.push(el);
+onBeforeUpdate(() => inputs = []);
+defineExpose({
+  focus() {
+    inputs[0].focus();
+  },
+  reset() {
+    digits.splice(0, digits.length);
+    inputs.forEach(input => input.value = '');
   },
 });
 
@@ -77,6 +96,12 @@ function onKeyDown(e: KeyboardEvent) {
 
     &:focus {
       outline: none;
+    }
+
+    &:disabled {
+      background-color: #e0e0e0;
+      color: #a0a0a0;
+      cursor: not-allowed;
     }
   }
 }

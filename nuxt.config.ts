@@ -11,4 +11,8 @@ export default defineNuxtConfig({
     css: [
         '@/assets/css/main.scss',
     ],
+    serverMiddleware: [
+        { path: '/logout', handle: '~/server/routes/logout', },
+        { path: '/login', handle: '~/server/routes/login' }
+    ],
 });

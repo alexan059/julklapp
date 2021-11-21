@@ -1,6 +1,7 @@
 import otpGenerator from 'otp-generator';
 import bcrypt from 'bcrypt';
 import { getOTP, updateOTP } from '~/server/queries/otp';
+import exp from 'constants';
 
 const SECONDS_TO_EXPIRE = 120;
 
@@ -21,7 +22,7 @@ export async function generateOTP(email) {
 }
 
 export async function verifyOTP(email, digits): Promise<boolean> {
-    const { hash, expires } = getOTP(email);
+    const { hash, expires } = await getOTP(email);
 
     return await bcrypt.compare(email + digits + expires, hash);
 }

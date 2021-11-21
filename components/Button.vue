@@ -6,6 +6,11 @@
 
 <style lang="scss" scoped>
 button {
+  display: flex;
+  justify-content: center;
+
+  height: 45px;
+
   border: none;
   border-radius: 50px;
   padding: .75rem 1.125rem;
@@ -28,6 +33,11 @@ button {
 
   &:focus {
     outline: none;
+  }
+
+  &:disabled {
+    background-color: #666;
+    cursor: not-allowed;
   }
 }
 </style>
