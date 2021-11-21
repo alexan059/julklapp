@@ -1,7 +1,6 @@
 import otpGenerator from 'otp-generator';
 import bcrypt from 'bcrypt';
 import { getOTP, updateOTP } from '~/server/queries/otp';
-import exp from 'constants';
 
 const SECONDS_TO_EXPIRE = 120;
 

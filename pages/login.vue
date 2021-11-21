@@ -37,7 +37,7 @@
 
 <script lang="ts" setup>
 import { useState } from '#app';
-import { reactive, ref, nextTick, onMounted, onBeforeUnmount } from 'vue';
+import { reactive, ref, nextTick } from 'vue';
 import useTimer from '~/composables/useTimer';
 
 const [time, startTimer, stopTimer] = useTimer();

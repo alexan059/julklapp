@@ -2,7 +2,7 @@ import { ServerResponse } from 'http';
 import { SessionRequest } from '~/types';
 import { useBody, sendError, createError } from 'h3';
 
-import { createUser, getUser } from '~/server/queries/user';
+import { createUser, getUserByEmail, setUserEmailConfirmed, updateUserSession } from '~/server/queries/user';
 import { generateOTP, verifyOTP } from '~/server/services/otp';
 import { sendOTPMail } from '~/server/services/mailer';
 import { resetOTP } from '~/server/queries/otp';
@@ -21,7 +21,7 @@ export default async (req: SessionRequest, res: ServerResponse) => {
         return sendError(res, createError({ statusCode: 400 }));
     }
 
-    const user = await getUser(email);
+    const user = await getUserByEmail(email);
 
     if (!user) {
         await createUser(email);
@@ -40,8 +40,13 @@ export default async (req: SessionRequest, res: ServerResponse) => {
         return sendError(res, createError({ statusCode: 401 }));
     }
 
+    if (!user?.email_confirmed) {
+        await setUserEmailConfirmed(user?.id);
+    }
+
     await resetOTP(email);
 
+    await updateUserSession(user?.id, req.session.id);
     req.session.loggedIn = true;
 
     return res.end(JSON.stringify({ success: true }));
