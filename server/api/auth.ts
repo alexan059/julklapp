@@ -2,14 +2,14 @@ import { ServerResponse } from 'http';
 import { SessionRequest } from '~/types';
 import { useBody, sendError, createError } from 'h3';
 
-import { createUser, getUserByEmail, setUserEmailConfirmed, updateUserSession } from '~/server/queries/user';
+import { createUser, getUserByEmail, setUserEmailConfirmed } from '~/server/queries/user';
 import { generateOTP, verifyOTP } from '~/server/services/otp';
 import { sendOTPMail } from '~/server/services/mailer';
 import { resetOTP } from '~/server/queries/otp';
 
 export default async (req: SessionRequest, res: ServerResponse) => {
 
-    // await new Promise(resolve => setTimeout(() => resolve(), 1000));
+    await new Promise(resolve => setTimeout(() => resolve(), 1000));
 
     if (req.method !== 'POST') {
         return sendError(res, createError({ statusCode: 404 }));
@@ -21,17 +21,17 @@ export default async (req: SessionRequest, res: ServerResponse) => {
         return sendError(res, createError({ statusCode: 400 }));
     }
 
-    const user = await getUserByEmail(email);
-
+    let user = await getUserByEmail(email);
     if (!user) {
-        await createUser(email);
+        user = await createUser(email);
     }
 
     if (!otp) {
         const { digits, expires } = await generateOTP(email);
-        if (!await sendOTPMail(email, digits)) {
-            return sendError(res, createError({ statusCode: 500 }));
-        }
+        // if (!await sendOTPMail(email, digits)) {
+        //     return sendError(res, createError({ statusCode: 500 }));
+        // }
+        console.log(digits);
 
         return res.end(JSON.stringify({ expires, success: true }));
     }
@@ -40,14 +40,14 @@ export default async (req: SessionRequest, res: ServerResponse) => {
         return sendError(res, createError({ statusCode: 401 }));
     }
 
-    if (!user?.email_confirmed) {
-        await setUserEmailConfirmed(user?.id);
+    if (!user.email_confirmed) {
+        await setUserEmailConfirmed(user.id);
     }
 
     await resetOTP(email);
 
-    await updateUserSession(user?.id, req.session.id);
     req.session.loggedIn = true;
+    req.session.userId = user.id;
 
     return res.end(JSON.stringify({ success: true }));
 }

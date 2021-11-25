@@ -7,11 +7,10 @@ export interface User {
     otp: string | null;
     created_at: Date;
     updated_at: Date;
-    session_id: string | null;
     email_confirmed: boolean;
 }
 
-export async function createUser(email) {
+export async function createUser(email): Promise<User> {
     try {
         const results = await pool.query('INSERT INTO users (email) VALUES ($1)', [email]);
     } catch (e) {
@@ -19,12 +18,12 @@ export async function createUser(email) {
     }
 }
 
-export async function getUserByEmail(email) : Promise<User | null> {
+export async function getUserByEmail(email): Promise<User> {
     try {
         const results = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
-        if (results.rowCount !== 1 ) {
-            return null;
+        if (results.rowCount !== 1) {
+            return;
         }
 
         return results.rows[0] as User;
@@ -33,12 +32,12 @@ export async function getUserByEmail(email) : Promise<User | null> {
     }
 }
 
-export async function getUserBySessionId(sessionId) : Promise<User | null> {
+export async function getUserById(userId): Promise<User> {
     try {
-        const results = await pool.query('SELECT * FROM users WHERE session_id = $1', [sessionId]);
+        const results = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
 
-        if (results.rowCount !== 1 ) {
-            return null;
+        if (results.rowCount !== 1) {
+            return;
         }
 
         return results.rows[0] as User;
@@ -58,14 +57,6 @@ export async function setUserEmailConfirmed(userId) {
 export async function updateUserName(userId, name) {
     try {
         const results = await pool.query('UPDATE users SET name = $1 WHERE id = $2', [name, userId]);
-    } catch (e) {
-        console.log(e);
-    }
-}
-
-export async function updateUserSession(userId, sessionId) {
-    try {
-        const results = await pool.query('UPDATE users SET session_id = $1 WHERE id = $2', [sessionId, userId])
     } catch (e) {
         console.log(e);
     }

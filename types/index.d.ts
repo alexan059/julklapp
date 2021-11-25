@@ -1,5 +1,5 @@
 import { Session } from 'express-session';
 import { IncomingMessage } from 'http';
 
-type CustomSession = Session & { loggedIn: boolean };
+type CustomSession = Session & { loggedIn: boolean, userId: number };
 type SessionRequest = IncomingMessage & { session: CustomSession };

@@ -10,7 +10,7 @@ export default session({
         tableName: 'session'
     }),
     secret: 'abcd1234',
-    resave: true,
+    resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
 });
