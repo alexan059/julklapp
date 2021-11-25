@@ -1,0 +1,82 @@
+<template>
+  <form class="form" @submit.prevent="onSubmit">
+
+    <h3 class="title">Create a new Group</h3>
+
+    <p>Choose an appropriate name for your group.</p>
+
+    <Field description="Only lowercase without special character and spaces.">
+      <label>
+        <input placeholder="Group Name" type="text" v-model.trim="state.name">
+      </label>
+    </Field>
+
+    <Field>
+      <label>
+        <textarea placeholder="Description" rows="4" v-model.trim="state.description"></textarea>
+      </label>
+    </Field>
+
+    <transition name="fade" mode="out-in">
+      <ErrorMessage v-if="state.error && !state.loading">{{ state.error }}</ErrorMessage>
+    </transition>
+
+    <AsyncButton center type="submit" :loading="state.loading">Create</AsyncButton>
+  </form>
+</template>
+
+<script lang="ts" setup>
+import { reactive } from 'vue';
+
+const initialState = {
+  name: '',
+  description: '',
+  loading: false,
+  error: '',
+};
+
+const state = reactive({ ...initialState });
+
+async function onSubmit() {
+  state.loading = true;
+  const { exists } = await $fetch('/api/group/exists', { params: { name: state.name } });
+
+  if (exists) {
+    state.error = 'Name already exists.';
+    state.loading = false;
+    return;
+  }
+
+  try {
+    const result = await $fetch('/api/group', {
+      method: 'POST',
+      body: { name: state.name, description: state.description },
+    });
+    console.log(result);
+  } catch (e) {
+    state.error = e.data.statusMessage;
+    state.loading = false;
+  }
+}
+
+</script>
+
+<style lang="scss" scoped>
+.title {
+  margin: 0 !important;
+  color: #999;
+  font-size: 1.5rem;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  > *:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+}
+</style>

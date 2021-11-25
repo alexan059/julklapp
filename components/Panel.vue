@@ -1,44 +1,36 @@
 <template>
-  <div class="panel">
-    <div ref="contentWrapper" class="panel__body">
-      <div ref="innerContent" class="panel__body__content">
-        <slot/>
+  <div class="panel" :style="{ width }">
+    <div ref="contentWrapper" class="panel__resize-wrapper">
+      <div ref="innerContent" class="panel__content-wrapper">
+        <div v-if="layout === 'sidebar' && $slots.sidebar" class="panel__sidebar">
+          <slot name="sidebar"/>
+        </div>
+        <div class="panel__body">
+          <slot/>
+        </div>
       </div>
     </div>
-    <div v-if="$slots.footer" class="panel__footer">
+    <div v-if="layout === 'default' && $slots.footer" class="panel__footer">
       <slot name="footer"/>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { ref } from 'vue';
+import useResizer from '~/composables/useResizer';
+
+interface PanelProps {
+  layout?: 'default' | 'sidebar';
+  width?: 'auto' | string;
+}
+
+const { layout, width } = withDefaults(defineProps<PanelProps>(), { layout: 'default', width: 'auto' });
 
 const contentWrapper = ref<null | any>(null);
 const innerContent = ref<null | any>(null);
 
-let panelObserver: ResizeObserver;
-
-function calculateContentHeight(el) {
-  const style = getComputedStyle(el);
-  const margin = parseInt(style.marginTop) + parseInt(style.marginBottom);
-
-  return el.offsetHeight + margin;
-}
-
-onMounted(() => {
-  panelObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
-    for (let entry of entries) {
-      if (entry.target === innerContent.value) {
-        const contentHeight = calculateContentHeight(entry.target);
-        contentWrapper.value.style.height = contentHeight + 'px';
-      }
-    }
-  });
-  panelObserver.observe(innerContent.value);
-});
-
-onBeforeUnmount(() => panelObserver.disconnect());
+useResizer(contentWrapper, innerContent);
 
 </script>
 
@@ -46,27 +38,35 @@ onBeforeUnmount(() => panelObserver.disconnect());
 .panel {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   min-width: 380px;
+  overflow: hidden;
   background-color: #fcfcfc;
   border-radius: 16px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.12);
 
+  &__resize-wrapper {
+    transition: height 200ms ease-out;
+    overflow: hidden;
+  }
+
+  &__content-wrapper {
+    display: flex;
+    flex-direction: row;
+  }
 
   &__body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
     padding: 26px 36px;
-    overflow: hidden;
-    transition: height 200ms ease-out;
+    overflow-y: scroll;
+  }
 
-    &__content {
-      display: flex;
-      flex-direction: column;
-
-      > *:not(:last-child) {
-        margin-bottom: 2rem;
-      }
-    }
-
+  &__sidebar {
+    padding: 26px 36px;
+    min-width: 132px;
+    background-color: #f0f0f0;
+    overflow-y: scroll;
   }
 
   &__footer {

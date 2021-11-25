@@ -23,11 +23,10 @@
         </transition>
 
         <template #footer>
-          <Button type="submit" :disabled="state.loading || state.verification">
-            <IconSpinner v-if="state.loading" animate/>
-            <span v-else-if="!state.verification">Submit</span>
+          <AsyncButton type="submit" center :disabled="state.verification" :loading="state.loading">
+            <span v-if="!state.verification">Submit</span>
             <span v-else>{{ time }}s</span>
-          </Button>
+          </AsyncButton>
         </template>
 
       </Panel>
@@ -38,7 +37,10 @@
 <script lang="ts" setup>
 import { useState } from '#app';
 import { reactive, ref, nextTick } from 'vue';
+import {useRouter} from 'vue-router';
 import useTimer from '~/composables/useTimer';
+
+const router = useRouter();
 
 const [time, startTimer, stopTimer] = useTimer();
 
@@ -66,7 +68,7 @@ async function onDigitsChange(otp) {
 
       if (success) {
         stopTimer();
-        window.location.reload();
+        await router.push('/lobby');
       }
     } catch (e) {
       if (e.data.statusCode === 401) {

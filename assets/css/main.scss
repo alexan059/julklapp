@@ -17,9 +17,19 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+ul {
+    padding: 0;
+    list-style: none;
+}
+
 .icon {
     height: 20px;
     width: 20px;
+
+    &.icon-2x {
+        height: 40px;
+        width: 40px;
+    }
 }
 
 .spinner.animate {

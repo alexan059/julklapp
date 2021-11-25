@@ -1,15 +1,26 @@
 <template>
-  <button v-bind="$props">
+  <button :class="{ center }" v-bind="$props">
     <slot/>
   </button>
 </template>
+
+<script lang="ts" setup>
+defineProps({
+  center: {
+    type: Boolean,
+    default: false,
+  },
+});
+</script>
 
 <style lang="scss" scoped>
 button {
   display: flex;
   justify-content: center;
+  align-items: center;
 
   height: 45px;
+  min-width: 160px;
 
   border: none;
   border-radius: 50px;
@@ -19,8 +30,11 @@ button {
   background-color: #5352ed;
   color: #fcfcfc;
 
-  align-self: center;
-  min-width: 160px;
+  align-self: start;
+
+  &.center {
+    align-self: center;
+  }
 
   &:hover {
     cursor: pointer;

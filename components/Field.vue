@@ -29,7 +29,7 @@ const props = defineProps({
     align-items: center;
     margin-bottom: .25rem;
     background-color: #f0f0f0;
-    border-radius: 50px;
+    border-radius: 20px;
     padding: .5rem 1.125rem;
 
     .icon {
@@ -37,7 +37,12 @@ const props = defineProps({
       margin-right: .35rem;
     }
 
-    input {
+    textarea {
+      resize: vertical;
+    }
+
+    input, textarea {
+      flex-grow: 1;
       background: none;
       border: none;
       font-size: 1rem;
