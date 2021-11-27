@@ -26,7 +26,12 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue';
+import { reactive, inject } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const updateGroups = inject('updateGroups');
 
 const initialState = {
   name: '',
@@ -52,6 +57,10 @@ async function onSubmit() {
       method: 'POST',
       body: { name: state.name, description: state.description },
     });
+
+    await updateGroups();
+    await router.push(`/group/${ result.uid }`);
+
     console.log(result);
   } catch (e) {
     state.error = e.data.statusMessage;

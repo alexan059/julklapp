@@ -3,7 +3,7 @@
     <h3 class="title">Welcome</h3>
     <ul class="menu">
       <li>
-        <NuxtLink to="/lobby/create">
+        <NuxtLink to="/group/create">
           <IconPlus/>
           New Group
         </NuxtLink>
@@ -23,14 +23,9 @@
     </ul>
     <h3 class="title">Lobby</h3>
     <ul class="menu">
-      <li>
-        <NuxtLink to="/group/njDvzwttIHbO">
-          #group1
-        </NuxtLink>
-      </li>
-      <li>
-        <NuxtLink to="/group/z5ETu8BrLeAq">
-          #group2
+      <li v-for="group in groups">
+        <NuxtLink :to="`/group/${ group.uid }`">
+          #{{ group.name }}
         </NuxtLink>
       </li>
     </ul>
@@ -38,7 +33,10 @@
 </template>
 
 <script lang="ts" setup>
+import { inject } from 'vue';
+import { GroupListItem } from '~/types';
 
+const groups = inject<GroupListItem[]>('groups');
 </script>
 
 <style lang="scss" scoped>
@@ -52,6 +50,8 @@
 
 ul.menu {
   margin: 0;
+  overflow-x: hidden;
+  word-break: break-all;
 
   &:not(:last-child) {
     margin-bottom: 2rem;
@@ -72,6 +72,7 @@ ul.menu {
       border-radius: 8px;
       text-decoration: none;
       text-transform: uppercase;
+
 
       &.router-link-active {
         color: #5352ed;

@@ -1,7 +1,7 @@
 import { SessionRequest } from '~/types';
 import { ServerResponse } from 'http';
 import { createError, sendError, useBody, useQuery } from 'h3';
-import { createGroup, groupNameExists, groupUIDExists, getGroupByUID } from '~/server/queries/group';
+import { createGroup, groupNameExists, groupUIDExists, getGroupByUID, getGroupsByUserId } from '~/server/queries/group';
 import { isEmpty } from '~/server/helpers/validation';
 import { nanoid } from '~/server/services/uid-code';
 
@@ -17,10 +17,13 @@ export default async (req: SessionRequest, res: ServerResponse) => {
         case 'GET': {
             const { uid } = await useQuery(req);
             if (!uid) {
-                // TODO get all groups from user
+                const groups = await getGroupsByUserId(userId);
+
+                return res.end(JSON.stringify({ single: false, groups, success: true }));
             }
             const group = await getGroupByUID(userId, uid);
-            return res.end(JSON.stringify({ group, success: true }));
+
+            return res.end(JSON.stringify({ single: true, group, success: true }));
         }
         case 'POST': {
             const { name, description } = await useBody(req);

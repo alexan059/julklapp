@@ -39,6 +39,7 @@ useResizer(contentWrapper, innerContent);
   display: flex;
   flex-direction: column;
   min-width: 380px;
+  max-height: 70vh;
   overflow: hidden;
   background-color: #fcfcfc;
   border-radius: 16px;
@@ -59,14 +60,16 @@ useResizer(contentWrapper, innerContent);
     flex-direction: column;
     flex-grow: 1;
     padding: 26px 36px;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   &__sidebar {
     padding: 26px 36px;
-    min-width: 132px;
+    min-width: 150px;
+    width: 150px;
+    max-height: 60vh;
     background-color: #f0f0f0;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   &__footer {

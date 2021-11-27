@@ -1,5 +1,4 @@
 import pool from '~/server/services/database';
-import { User } from '~/server/queries/user';
 
 export interface Group {
     id: number,
@@ -46,6 +45,25 @@ export async function groupUIDExists(uid: string): Promise<boolean> {
         );
 
         return parseInt(results.rows[0]?.count ?? 0) > 0;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export async function getGroupsByUserId(userId) {
+    try {
+        const results = await pool.query(
+            `SELECT uid, name
+             FROM groups
+             WHERE id IN (SELECT group_id FROM group_users WHERE user_id = $1)`,
+            [userId],
+        );
+
+        if (results.rowCount === 0) {
+            return [];
+        }
+
+        return results.rows;
     } catch (e) {
         console.log(e);
     }

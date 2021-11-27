@@ -36,11 +36,12 @@
 
 <script lang="ts" setup>
 import { useState } from '#app';
-import { reactive, ref, nextTick } from 'vue';
+import { reactive, ref, nextTick, inject } from 'vue';
 import {useRouter} from 'vue-router';
 import useTimer from '~/composables/useTimer';
 
 const router = useRouter();
+const updateGroups = inject('updateGroups');
 
 const [time, startTimer, stopTimer] = useTimer();
 
@@ -68,6 +69,7 @@ async function onDigitsChange(otp) {
 
       if (success) {
         stopTimer();
+        await updateGroups();
         await router.push('/lobby');
       }
     } catch (e) {
