@@ -8,3 +8,8 @@ interface GroupListItem {
     uid: string;
     name: string;
 }
+
+interface GroupItem {
+    uid: string;
+    name: string;
+}

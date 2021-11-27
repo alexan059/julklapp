@@ -1,7 +1,7 @@
 <template>
   <form class="form" @submit.prevent="onSubmit">
 
-    <h3 class="title">Create a new Group</h3>
+    <Title>Create a new Group</Title>
 
     <p>Choose an appropriate name for your group.</p>
 
@@ -71,14 +71,6 @@ async function onSubmit() {
 </script>
 
 <style lang="scss" scoped>
-.title {
-  margin: 0 !important;
-  color: #999;
-  font-size: 1.5rem;
-  font-weight: 300;
-  text-transform: uppercase;
-}
-
 .form {
   display: flex;
   flex-direction: column;
