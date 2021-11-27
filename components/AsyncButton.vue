@@ -1,5 +1,5 @@
 <template>
-  <Button v-bind="$props" :center="center" :disabled="disabled || loading">
+  <Button v-bind="$props" :center="center" :primary="true" :disabled="disabled || loading">
     <IconSpinner v-if="loading" animate/>
     <slot v-else/>
   </Button>

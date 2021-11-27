@@ -1,7 +1,14 @@
 import { SessionRequest } from '~/types';
 import { ServerResponse } from 'http';
 import { createError, sendError, useBody, useQuery } from 'h3';
-import { createGroup, groupNameExists, groupUIDExists, getGroupByUID, getGroupsByUserId } from '~/server/queries/group';
+import {
+    createGroup,
+    groupNameExists,
+    groupUIDExists,
+    getGroupByUID,
+    getGroupsByUserId,
+    deleteGroupById,
+} from '~/server/queries/group';
 import { isEmpty } from '~/server/helpers/validation';
 import { nanoid } from '~/server/services/uid-code';
 
@@ -40,6 +47,12 @@ export default async (req: SessionRequest, res: ServerResponse) => {
             const success = await createGroup(userId, uid, name, description);
 
             return res.end(JSON.stringify({ uid, success }));
+        }
+        case 'DELETE': {
+            const { uid } = useQuery(req);
+            const success = await deleteGroupById(userId, uid as string);
+
+            return res.end(JSON.stringify({ success }));
         }
         default:
             return sendError(res, createError({ statusCode: 404 }));

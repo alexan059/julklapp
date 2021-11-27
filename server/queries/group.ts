@@ -50,7 +50,7 @@ export async function groupUIDExists(uid: string): Promise<boolean> {
     }
 }
 
-export async function getGroupsByUserId(userId) {
+export async function getGroupsByUserId(userId: number): Promise<Group[]> {
     try {
         const results = await pool.query(
             `SELECT uid, name
@@ -63,7 +63,7 @@ export async function getGroupsByUserId(userId) {
             return [];
         }
 
-        return results.rows;
+        return results.rows as Group[];
     } catch (e) {
         console.log(e);
     }
@@ -84,6 +84,22 @@ export async function getGroupByUID(userId: number, uid: string): Promise<Group>
         }
 
         return results.rows[0] as Group;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export async function deleteGroupById(userId: number, groupUID: string): Promise<boolean> {
+    try {
+        const results = await pool.query(
+            `DELETE
+             FROM groups
+             WHERE owner_id = $1
+               AND uid = $2`,
+            [userId, groupUID],
+        );
+
+        return results.rowCount > 0;
     } catch (e) {
         console.log(e);
     }

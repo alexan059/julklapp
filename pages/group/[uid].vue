@@ -4,24 +4,44 @@
     <div class="content" v-else>
       <Title>{{ data.group.name }}</Title>
       <ul class="actions">
-        <li><button>Invite</button></li>
-        <li><button>Close</button></li>
-        <li><button>Delete</button></li>
+        <li>
+          <button>Invite</button>
+        </li>
+        <li>
+          <button>Close</button>
+        </li>
+        <li>
+          <Prompt @confirm="deleteGroup">Delete</Prompt>
+        </li>
       </ul>
     </div>
   </transition>
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { inject, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useAsyncData } from '#app';
 
 const { params } = useRoute();
+const router = useRouter();
 
 const { data, pending, refresh } = useAsyncData('group', () => $fetch('/api/group', { params: { uid: params.uid } }));
 
 onMounted(refresh);
+
+const updateGroups = inject('updateGroups');
+
+async function deleteGroup() {
+  const { success } = await $fetch('/api/groups', { method: 'DELETE', params: { uid: params.uid } });
+
+  if (!success) {
+    alert('Oops, something went wrong!');
+  }
+
+  updateGroups();
+  await router.push('/lobby');
+}
 
 </script>
 
@@ -43,7 +63,7 @@ ul.actions {
       margin-left: .575rem;
     }
 
-    button {
+    &:deep button {
       padding: 4px 16px;
       background-color: #e0e0e0;
       color: #999999;

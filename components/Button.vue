@@ -1,5 +1,5 @@
 <template>
-  <button :class="{ center }" v-bind="$props">
+  <button :class="{ center, danger, primary }" v-bind="$props">
     <slot/>
   </button>
 </template>
@@ -10,6 +10,14 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  primary: {
+    type: Boolean,
+    default: false
+  },
+  danger: {
+    type: Boolean,
+    default: false
+  }
 });
 </script>
 
@@ -27,10 +35,18 @@ button {
   padding: .75rem 1.125rem;
   font-size: 18px;
   font-weight: 300;
-  background-color: #5352ed;
+  background-color: #999999;
   color: #fcfcfc;
 
   align-self: start;
+
+  &.danger {
+    background-color: darken(#ff4757, 20%);
+  }
+
+  &.primary {
+    background-color: #5352ed;
+  }
 
   &.center {
     align-self: center;
@@ -38,11 +54,25 @@ button {
 
   &:hover {
     cursor: pointer;
-    background-color: darken(#5352ed, 5%);
+    background-color: darken(#999999, 5%);
+
+    &.danger {
+      background-color: darken(#ff4757, 25%);
+    }
+    &.primary {
+      background-color: darken(#5352ed, 5%);
+    }
   }
 
   &:active {
-    background-color: lighten(#5352ed, 10%);
+    background-color: lighten(#999999, 10%);
+
+    &.danger {
+      background-color: darken(#ff4757, 10%);
+    }
+    &.primary {
+      background-color: lighten(#5352ed, 10%);
+    }
   }
 
   &:focus {
@@ -50,8 +80,10 @@ button {
   }
 
   &:disabled {
-    background-color: #666;
-    cursor: not-allowed;
+    &, &:hover, &:active {
+      background-color: #666;
+      cursor: not-allowed;
+    }
   }
 }
 </style>
