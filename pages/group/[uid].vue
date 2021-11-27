@@ -11,7 +11,12 @@
           <button>Close</button>
         </li>
         <li>
-          <Prompt @confirm="deleteGroup">Delete</Prompt>
+          <Prompt @confirm="deleteGroup">
+            Delete
+            <template #text>
+              Are you sure?
+            </template>
+          </Prompt>
         </li>
       </ul>
     </div>

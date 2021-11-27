@@ -1,75 +1,32 @@
 <template>
-  <button @click="showModal">
+  <Modal ref="modal">
     <slot/>
-  </button>
-  <teleport to="body">
-    <transition name="fade" mode="out-in">
-      <div v-if="show" class="prompt">
-        <div class="background"></div>
-        <Center @click.self="hideModal" class="prompt-body">
-          <Panel>
-            <div class="prompt-content">
-              <Title>Are you sure?</Title>
-              <div class="prompt-actions">
-                <Button @click="confirm" danger>Delete</Button>
-                <Button @click="hideModal">Cancel</Button>
-              </div>
-            </div>
-          </Panel>
-        </Center>
+    <template #modal>
+      <Title><slot name="text"></slot></Title>
+      <div class="actions">
+        <Button @click="confirm" danger>Delete</Button>
+        <Button @click="() => modal.hideModal()">Cancel</Button>
       </div>
-    </transition>
-  </teleport>
+    </template>
+  </Modal>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-const show = ref(false);
-
-const showModal = () => show.value = true;
-const hideModal = () => show.value = false;
+const modal = ref(null);
 
 const emit = defineEmits(['confirm']);
 const confirm = () => {
   emit('confirm');
-  hideModal();
-}
+  modal.hideModal();
+};
 </script>
 
 <style lang="scss" scoped>
-.prompt {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-
-  .background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-
-    background-color: rgba(0, 0, 0, .25);
-  }
-
-  &-body {
-    position: relative;
-  }
-
-  &-content {
-    p {
-      align-self: center;
-      margin-bottom: 2rem;
-    }
-  }
-
-  &-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 </style>
