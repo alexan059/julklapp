@@ -1,15 +1,15 @@
 <template>
-  <button @click="showModal">
+  <button @click="show">
     <slot/>
   </button>
   <teleport to="body">
     <transition name="fade" mode="out-in">
-      <div v-if="show" class="modal">
+      <div v-if="open" class="modal">
         <div class="background"></div>
-        <Center @click.self="hideModal" class="modal-body">
+        <Center @click.self="hide" class="modal-body">
           <Panel>
             <div class="modal-content">
-              <slot name="modal"/>
+              <slot name="body"/>
             </div>
           </Panel>
         </Center>
@@ -21,14 +21,22 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-const show = ref(false);
+const emit = defineEmits(['show', 'hide']);
 
-const showModal = () => show.value = true;
-const hideModal = () => show.value = false;
+const open = ref(false);
+
+const show = () => {
+  open.value = true;
+  emit('show');
+}
+const hide = () => {
+  open.value = false;
+  emit('hide');
+}
 
 defineExpose({
-  showModal,
-  hideModal,
+  show,
+  hide,
 });
 </script>
 

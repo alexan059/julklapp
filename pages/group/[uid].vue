@@ -5,13 +5,30 @@
       <Title>{{ data.group.name }}</Title>
       <ul class="actions">
         <li>
-          <button>Invite</button>
+          <Modal @show="onOpenModal" @hide="onHideModal" ref="invitationModal">
+            Invite
+            <template #body>
+              <transition name="fade" mode="out-in">
+                <Loader v-if="!invitationURL"/>
+                <div v-else class="invite-modal">
+                  <Title>Invite your friends</Title>
+                  <p>Scan QR Code</p>
+                  <QRCode :text="invitationURL"/>
+                  <p>Or Copy Link (click)</p>
+                  <TextClip :value="invitationURL">
+                    {{ invitationURL }}
+                  </TextClip>
+                  <Button @click="invitationModal?.hide" center small>Close</Button>
+                </div>
+              </transition>
+            </template>
+          </Modal>
         </li>
         <li>
           <button>Close</button>
         </li>
         <li>
-          <Prompt @confirm="deleteGroup">
+          <Prompt @confirm="onDeleteGroup">
             Delete
             <template #text>
               Are you sure?
@@ -24,20 +41,23 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, onMounted } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAsyncData } from '#app';
 
-const { params } = useRoute();
+const { params, fullPath } = useRoute();
 const router = useRouter();
 
 const { data, pending, refresh } = useAsyncData('group', () => $fetch('/api/group', { params: { uid: params.uid } }));
 
-onMounted(refresh);
+const invitationURL = ref('');
+const invitationModal = ref(null);
 
 const updateGroups = inject('updateGroups');
 
-async function deleteGroup() {
+onMounted(refresh);
+
+async function onDeleteGroup() {
   const { success } = await $fetch('/api/groups', { method: 'DELETE', params: { uid: params.uid } });
 
   if (!success) {
@@ -48,14 +68,31 @@ async function deleteGroup() {
   await router.push('/lobby');
 }
 
+const onHideModal = () => invitationURL.value = '';
+async function onOpenModal() {
+  const data = await $fetch('/api/group/invitation', { params: { uid: params.uid } });
+  invitationURL.value = data.url;
+}
+
 </script>
 
 <style lang="scss" scoped>
+.invite-modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  > *:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+}
+
 .content {
   display: flex;
   flex-direction: column;
 
-  * > {
+  > * {
     margin-bottom: 2rem;
   }
 }

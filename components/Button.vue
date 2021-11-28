@@ -1,5 +1,5 @@
 <template>
-  <button :class="{ center, danger, primary }" v-bind="$props">
+  <button :class="{ center, danger, primary, small }" v-bind="$props">
     <slot/>
   </button>
 </template>
@@ -15,6 +15,10 @@ defineProps({
     default: false
   },
   danger: {
+    type: Boolean,
+    default: false
+  },
+  small: {
     type: Boolean,
     default: false
   }
@@ -39,6 +43,12 @@ button {
   color: #fcfcfc;
 
   align-self: start;
+
+  &.small {
+    height: 36px;
+    padding: .325rem .5625rem;
+    font-size: 14px;
+  }
 
   &.danger {
     background-color: darken(#ff4757, 20%);

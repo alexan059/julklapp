@@ -11,17 +11,21 @@
     "@types/express-session": "^1.17.4",
     "@types/nodemailer": "^6.4.4",
     "@types/pg": "^8.6.1",
+    "@types/qrcode": "^1.4.1",
     "nuxt-storm": "^1.1.2",
     "nuxt3": "^3.0.0-27288761.d3fb512",
     "sass": "^1.43.4"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "clipboard": "^2.0.8",
     "connect-pg-simple": "^7.0.0",
     "express-session": "^1.17.2",
     "nanoid": "^3.1.30",
     "nodemailer": "^6.7.1",
     "otp-generator": "^3.0.0",
-    "pg": "^8.7.1"
+    "pg": "^8.7.1",
+    "primer-tooltips": "^2.0.0",
+    "qrcode": "^1.5.0"
   }
 }

@@ -22,7 +22,7 @@
       </li>
     </ul>
     <h3 class="title">Lobby</h3>
-    <ul class="menu">
+    <ul v-if="groups" class="menu">
       <li v-for="group in groups">
         <NuxtLink :to="`/group/${ group.uid }`">
           #{{ group.name }}
