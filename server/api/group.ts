@@ -28,7 +28,11 @@ export default async (req: SessionRequest, res: ServerResponse) => {
 
                 return res.end(JSON.stringify({ single: false, groups, success: true }));
             }
-            const group = await getGroupByUID(userId, uid);
+            const group = await getGroupByUID(userId, uid as string);
+
+            if (!group) {
+                return sendError(res, createError({ statusCode: 404 }));
+            }
 
             return res.end(JSON.stringify({ single: true, group, success: true }));
         }

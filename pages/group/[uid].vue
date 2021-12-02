@@ -24,12 +24,20 @@
             </template>
           </Modal>
         </li>
-        <li>
+        <li v-if="data.group.is_admin">
           <button>Close</button>
         </li>
-        <li>
+        <li v-if="data.group.is_admin">
           <Prompt @confirm="onDeleteGroup">
             Delete
+            <template #text>
+              Are you sure?
+            </template>
+          </Prompt>
+        </li>
+        <li v-else>
+          <Prompt @confirm="onLeaveGroup">
+            Leave
             <template #text>
               Are you sure?
             </template>
@@ -41,30 +49,36 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAsyncData } from '#app';
+import useGroups from '~/composables/useGroups';
 
 const { params, fullPath } = useRoute();
 const router = useRouter();
+
+const [_, { deleteGroup, leaveGroup }] = useGroups();
 
 const { data, pending, refresh } = useAsyncData('group', () => $fetch('/api/group', { params: { uid: params.uid } }));
 
 const invitationURL = ref('');
 const invitationModal = ref(null);
 
-const updateGroups = inject('updateGroups');
-
 onMounted(refresh);
 
 async function onDeleteGroup() {
-  const { success } = await $fetch('/api/groups', { method: 'DELETE', params: { uid: params.uid } });
+  const success = await deleteGroup(params.uid);
 
-  if (!success) {
-    alert('Oops, something went wrong!');
+  if (!success) { // TODO Notification
+    return alert('Oops, something went wrong!');
   }
 
-  updateGroups();
+  await router.push('/lobby');
+}
+
+async function onLeaveGroup() {
+  await leaveGroup(params.uid);
+
   await router.push('/lobby');
 }
 

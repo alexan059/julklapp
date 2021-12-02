@@ -4,7 +4,7 @@
     <template #body>
       <Title><slot name="text"></slot></Title>
       <div class="actions">
-        <Button @click="confirm" danger small>Delete</Button>
+        <Button @click="confirm" danger small><slot>Confirm</slot></Button>
         <Button @click="cancel" small>Cancel</Button>
       </div>
     </template>

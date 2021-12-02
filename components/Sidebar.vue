@@ -33,10 +33,9 @@
 </template>
 
 <script lang="ts" setup>
-import { inject } from 'vue';
-import { GroupListItem } from '~/types';
+import useGroups from '~/composables/useGroups';
 
-const groups = inject<GroupListItem[]>('groups');
+const [groups] = useGroups();
 </script>
 
 <style lang="scss" scoped>
