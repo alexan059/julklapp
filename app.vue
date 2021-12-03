@@ -9,10 +9,10 @@ import { onMounted, ref, provide } from 'vue';
 
 const groups = ref([]);
 
- const updateGroups = async () => {
+const updateGroups = async () => {
   const data = await $fetch('/api/groups');
   groups.value = data.groups;
-}
+};
 
 onMounted(() => updateGroups());
 

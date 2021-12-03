@@ -49,9 +49,9 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useAsyncData } from '#app';
+import { useLazyAsyncData } from '#app';
 import useGroups from '~/composables/useGroups';
 
 const { params, fullPath } = useRoute();
@@ -59,12 +59,14 @@ const router = useRouter();
 
 const [_, { deleteGroup, leaveGroup }] = useGroups();
 
-const { data, pending, refresh } = useAsyncData('group', () => $fetch('/api/group', { params: { uid: params.uid } }));
+const { data, pending } = useLazyAsyncData(
+    'group',
+    () => $fetch('/api/group', { params: { uid: params.uid } }),
+    { server: false }
+);
 
 const invitationURL = ref('');
 const invitationModal = ref(null);
-
-onMounted(refresh);
 
 async function onDeleteGroup() {
   const success = await deleteGroup(params.uid);
@@ -83,6 +85,7 @@ async function onLeaveGroup() {
 }
 
 const onHideModal = () => invitationURL.value = '';
+
 async function onOpenModal() {
   const data = await $fetch('/api/group/invitation', { params: { uid: params.uid } });
   invitationURL.value = data.url;
