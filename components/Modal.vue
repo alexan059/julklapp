@@ -29,7 +29,7 @@ interface ModalExpose {
 export declare type ModalRef = ModalExpose|null;
 
 interface ModalProps {
-  showButton: boolean;
+  showButton?: boolean;
 }
 
 const props = withDefaults(defineProps<ModalProps>(), { showButton: true });

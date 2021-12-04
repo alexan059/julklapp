@@ -3,7 +3,7 @@
     <Title>Dashboard</Title>
     <p>Welcome to the Julklapp App.</p>
     <p>Please select your group or create a new one and invite your friends.</p>
-    <p>You can change your profile on the profile page.</p>
+    <p>You can change your name and avatar on the profile page.</p>
   </div>
 </template>
 

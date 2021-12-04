@@ -29,7 +29,7 @@
           New Group
         </NuxtLink>
       </li>
-      <li v-for="group in groups">
+      <li v-for="group in groups" :key="group.uid">
         <NuxtLink :to="`/group/${ group.uid }`">
           #{{ group.name }}
         </NuxtLink>
