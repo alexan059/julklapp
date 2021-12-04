@@ -1,5 +1,5 @@
 <template>
-  <button @click="show">
+  <button v-if="props.showButton" @click="show">
     <slot/>
   </button>
   <teleport to="body">
@@ -21,6 +21,18 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
+interface ModalExpose {
+  show: () => void;
+  hide: () => void;
+}
+
+export declare type ModalRef = ModalExpose|null;
+
+interface ModalProps {
+  showButton: boolean;
+}
+
+const props = withDefaults(defineProps<ModalProps>(), { showButton: true });
 const emit = defineEmits(['show', 'hide']);
 
 const open = ref(false);
@@ -28,13 +40,13 @@ const open = ref(false);
 const show = () => {
   open.value = true;
   emit('show');
-}
+};
 const hide = () => {
   open.value = false;
   emit('hide');
-}
+};
 
-defineExpose({
+defineExpose<Modal>({
   show,
   hide,
 });

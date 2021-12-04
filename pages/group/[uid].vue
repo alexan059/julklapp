@@ -75,13 +75,13 @@ async function onDeleteGroup() {
     return alert('Oops, something went wrong!');
   }
 
-  await router.push('/lobby');
+  await router.push('/dashboard');
 }
 
 async function onLeaveGroup() {
   await leaveGroup(params.uid);
 
-  await router.push('/lobby');
+  await router.push('/dashboard');
 }
 
 const onHideModal = () => invitationURL.value = '';

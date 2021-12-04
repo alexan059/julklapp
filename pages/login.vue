@@ -36,13 +36,12 @@
 
 <script lang="ts" setup>
 import { useState } from '#app';
-import { reactive, ref, nextTick, inject } from 'vue';
+import { reactive, ref, nextTick } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import useTimer from '~/composables/useTimer';
 
 const { query } = useRoute();
 const router = useRouter();
-const updateGroups = inject('updateGroups');
 
 const [time, startTimer, stopTimer] = useTimer();
 
@@ -70,7 +69,7 @@ async function onDigitsChange(otp) {
 
       if (success) {
         stopTimer();
-        await router.push({ path: '/lobby', query });
+        await router.push({ path: '/dashboard', query });
       }
     } catch (e) {
       if (e.data.statusCode === 401) {

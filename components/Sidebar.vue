@@ -3,15 +3,15 @@
     <h3 class="title">Welcome</h3>
     <ul class="menu">
       <li>
-        <NuxtLink to="/group/create">
-          <IconPlus/>
-          New Group
+        <NuxtLink to="/dashboard">
+          <IconHome/>
+          Dashboard
         </NuxtLink>
       </li>
       <li>
-        <NuxtLink to="/lobby/settings">
-          <IconSettings/>
-          Settings
+        <NuxtLink to="/dashboard/profile">
+          <IconUser/>
+          Profile
         </NuxtLink>
       </li>
       <li>
@@ -21,8 +21,14 @@
         </a>
       </li>
     </ul>
-    <h3 class="title">Lobby</h3>
+    <h3 class="title">Groups</h3>
     <ul v-if="groups" class="menu">
+      <li>
+        <NuxtLink to="/group/create">
+          <IconPlus/>
+          New Group
+        </NuxtLink>
+      </li>
       <li v-for="group in groups">
         <NuxtLink :to="`/group/${ group.uid }`">
           #{{ group.name }}
@@ -73,7 +79,7 @@ ul.menu {
       text-transform: uppercase;
 
 
-      &.router-link-active {
+      &.router-link-exact-active {
         color: #5352ed;
         font-weight: 600;
       }

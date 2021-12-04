@@ -13,12 +13,14 @@ import { useRoute, useRouter } from 'vue-router';
 import { onMounted } from 'vue';
 import useGroups from '~/composables/useGroups';
 
-const [_, { joinGroup }] = useGroups();
+const [_, { joinGroup, updateGroups }] = useGroups();
 
 const { query } = useRoute();
 const router = useRouter();
 
 onMounted(async () => {
+  await updateGroups();
+
   if (query?.ref) {
     const { success, redirect } = await joinGroup(query.ref);
 

@@ -27,10 +27,13 @@ const props = defineProps({
   ::v-slotted(label) {
     display: flex;
     align-items: center;
-    margin-bottom: .25rem;
     background-color: #f0f0f0;
     border-radius: 20px;
     padding: .5rem 1.125rem;
+
+    &:not(:last-child) {
+      margin-bottom: .25rem;
+    }
 
     .icon {
       color: #aaa;

@@ -9,7 +9,7 @@ export default async function (req: SessionRequest, res: ServerResponse, next) {
     const uid = req.url?.toString().replace('/', '');
 
     if (await groupUIDExists(uid)) {
-        const route = req.session.loggedIn ? 'lobby' : 'login';
+        const route = req.session.loggedIn ? 'dashboard' : 'login';
         redirect = `http://localhost:3000/${ route }?ref=${ uid }`;
     }
 

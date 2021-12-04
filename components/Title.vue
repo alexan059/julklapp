@@ -1,6 +1,16 @@
 <template>
-  <h3 class="title"><slot/></h3>
+  <h3 :class="['title', {center}]">
+    <slot/>
+  </h3>
 </template>
+
+<script lang="ts" setup>
+interface TitleProps {
+  center?: boolean;
+}
+
+const { center } = withDefaults(defineProps<TitleProps>(), { center: false });
+</script>
 
 <style lang="scss" scoped>
 .title {
@@ -9,5 +19,9 @@
   font-size: 1.5rem;
   font-weight: 300;
   text-transform: uppercase;
+
+  &.center {
+    text-align: center;
+  }
 }
 </style>
