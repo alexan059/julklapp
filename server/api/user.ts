@@ -2,7 +2,7 @@ import { SessionRequest } from '~/types';
 import { ServerResponse } from 'http';
 import { createError, sendError, useBody } from 'h3';
 import { getUserById, updateUser } from '~/server/queries/user';
-import { isEmpty } from '~/server/helpers/validation';
+import { isEmpty, isMaxLength } from '~/server/helpers/validation';
 
 export default async (req: SessionRequest, res: ServerResponse) => {
 
@@ -22,6 +22,9 @@ export default async (req: SessionRequest, res: ServerResponse) => {
             const { name, avatar, item_like, item_dislike } = await useBody(req);
             if (isEmpty(name)) {
                 return sendError(res, createError({ statusCode: 400, statusMessage: 'Name cannot be empty.' }));
+            }
+            if (isMaxLength(name, 16)) {
+                return sendError(res, createError({ statusCode: 400, statusMessage: 'Name is too long. (16 characters max.)' }));
             }
             const success = await updateUser(userId, { name, avatar, item_like, item_dislike });
 

@@ -44,6 +44,7 @@
           </Prompt>
         </li>
       </ul>
+      <GroupUsers :users="data.group.users"/>
     </div>
   </transition>
 </template>

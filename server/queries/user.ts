@@ -13,9 +13,9 @@ export async function createUser(email: string): Promise<User> {
 export async function updateUser(userId: number, { name, avatar, item_like, item_dislike }) {
     return runQuery(
         `UPDATE users
-         SET name = $1,
-             avatar = $2,
-             item_like = $3,
+         SET name         = $1,
+             avatar       = $2,
+             item_like    = $3,
              item_dislike = $4
          WHERE id = $5`,
         [name, avatar, item_like, item_dislike, userId],
@@ -23,30 +23,33 @@ export async function updateUser(userId: number, { name, avatar, item_like, item
     );
 }
 
-/*export async function getUsersByGroup(userId: number, groupUID: string) {
-    try {
-        const results = await pool.query(
-            `SELECT id, name
-             FROM users
-             WHERE id IN (
-                 SELECT user_id FROM group_users WHERE group_id = (SELECT id FROM groups WHERE uid = $1)
-             )`,
-            [userId, groupUID],
-        );
-
-        if (results.rowCount !== 1) {
-            return;
-        }
-
-        return results.rows[0] as Group;
-    } catch (e) {
-        console.log(e);
-    }
-}*/
+export async function getUsersByGroup(userId: number, groupUID: string): Promise<User[]> {
+    return runQuery(
+        `SELECT name, avatar
+         FROM users
+         WHERE id IN (
+             SELECT user_id
+             FROM group_users
+             WHERE group_id = (
+                 SELECT id
+                 FROM groups
+                 WHERE uid = $1
+             )
+         )`,
+        [groupUID], // TODO never return group users when not logged in
+    );
+}
 
 export async function getUserByEmail(email: string): Promise<User> {
     return runQuery(
-        `SELECT id, email, name, role, email_confirmed, avatar, item_like, item_dislike
+        `SELECT id,
+                email,
+                name,
+                role,
+                email_confirmed,
+                avatar,
+                item_like,
+                item_dislike
          FROM users
          WHERE email = $1`,
         [email],

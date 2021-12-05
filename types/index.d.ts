@@ -14,7 +14,7 @@ export interface Group {
 declare type GroupList = Group[];
 
 export interface User {
-    id: number;
+    name: string;
     email: string;
     role: 'user' | 'admin';
     email_confirmed: boolean;

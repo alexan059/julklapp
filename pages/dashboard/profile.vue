@@ -10,7 +10,7 @@
 
       <Field class="fullwidth" description="Choose your avatar emoji on the left (click).">
         <label>
-          <input placeholder="Name" type="text" v-model="state.name">
+          <input placeholder="Name" type="text" v-model.trim="state.name">
         </label>
       </Field>
     </div>
