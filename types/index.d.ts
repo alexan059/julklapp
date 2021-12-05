@@ -4,12 +4,21 @@ import { IncomingMessage } from 'http';
 type CustomSession = Session & { loggedIn: boolean, userId: number };
 type SessionRequest = IncomingMessage & { session: CustomSession };
 
-interface GroupListItem {
-    uid: string;
-    name: string;
+export interface Group {
+    name: string,
+    description: string,
+    uid: string,
+    is_admin?: boolean,
 }
 
-interface GroupItem {
-    uid: string;
-    name: string;
+declare type GroupList = Group[];
+
+export interface User {
+    id: number;
+    email: string;
+    role: 'user' | 'admin';
+    email_confirmed: boolean;
+    avatar: string;
+    item_like: string;
+    item_dislike: string;
 }

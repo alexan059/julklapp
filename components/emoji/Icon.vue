@@ -26,7 +26,7 @@ watchEffect(() => {
 </script>
 
 <style lang="scss" scoped>
-:deep .emoji {
+:deep(.emoji) {
   height: 1.5em;
   width: 1.5em;
   margin: 0 .05em 0 .1em;

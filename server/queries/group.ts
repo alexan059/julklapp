@@ -1,23 +1,5 @@
 import runQuery, { transformAffected, transformExists, transformFirst } from '~/server/helpers/database';
-
-export interface Group {
-    // id: number,
-    name: string,
-    // owner_id: number,
-    description: string,
-    uid: string,
-    is_admin?: boolean,
-}
-
-export async function groupNameExists(name: string): Promise<boolean> {
-    return await runQuery(
-        `SELECT COUNT(*)
-         FROM groups
-         WHERE name = $1`,
-        [name],
-        transformExists,
-    );
-}
+import { Group } from '~/types';
 
 export async function createGroup(userId: number, uid: number, name: string, description: string): Promise<boolean> {
     return await runQuery(

@@ -5,17 +5,12 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, provide } from 'vue';
+import { onMounted } from 'vue';
+import { provideGroups } from '~/composables/useGroups';
+import { provideProfile } from '~/composables/useProfile';
 
-const groups = ref([]);
+const [_, fetchGroups] = provideGroups();
+const [__, fetchUser] = provideProfile();
 
-const updateGroups = async () => {
-  const data = await $fetch('/api/groups');
-  groups.value = data.groups;
-};
-
-onMounted(() => updateGroups());
-
-provide('groups', groups);
-provide('updateGroups', updateGroups);
+onMounted(() => Promise.all([fetchGroups(true), fetchUser(true)]));
 </script>

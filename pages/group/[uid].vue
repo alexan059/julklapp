@@ -1,6 +1,6 @@
 <template>
   <transition name="fade" mode="out-in">
-    <Loader v-if="!data || pending"/>
+    <Loader v-if="pending"/>
     <div class="content" v-else>
       <Title>{{ data.group.name }}</Title>
       <ul class="actions">
@@ -57,19 +57,15 @@ import useGroups from '~/composables/useGroups';
 const { params, fullPath } = useRoute();
 const router = useRouter();
 
-const [_, { deleteGroup, leaveGroup }] = useGroups();
+const [_, { deleteGroup, leaveGroup, fetchGroup, createInvitation }] = useGroups();
 
-const { data, pending } = useLazyAsyncData(
-    'group',
-    () => $fetch('/api/group', { params: { uid: params.uid } }),
-    { server: false }
-);
+const { data, pending } = useLazyAsyncData('group', () => fetchGroup(params.uid as string), { server: false });
 
 const invitationURL = ref('');
 const invitationModal = ref(null);
 
 async function onDeleteGroup() {
-  const success = await deleteGroup(params.uid);
+  const success = await deleteGroup(params.uid as string);
 
   if (!success) { // TODO Notification
     return alert('Oops, something went wrong!');
@@ -79,7 +75,7 @@ async function onDeleteGroup() {
 }
 
 async function onLeaveGroup() {
-  await leaveGroup(params.uid);
+  await leaveGroup(params.uid as string);
 
   await router.push('/dashboard');
 }
@@ -87,8 +83,7 @@ async function onLeaveGroup() {
 const onHideModal = () => invitationURL.value = '';
 
 async function onOpenModal() {
-  const data = await $fetch('/api/group/invitation', { params: { uid: params.uid } });
-  invitationURL.value = data.url;
+  invitationURL.value = await createInvitation(params.uid as string);
 }
 
 </script>
@@ -122,7 +117,7 @@ ul.actions {
       margin-left: .575rem;
     }
 
-    &:deep button {
+    :deep(button) {
       padding: 4px 16px;
       background-color: #e0e0e0;
       color: #999999;

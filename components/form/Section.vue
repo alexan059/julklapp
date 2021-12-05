@@ -1,31 +1,21 @@
 <template>
-  <form class="form" @submit.prevent="onSubmitDelegate">
+  <form class="form" @submit.prevent="(e) => emit('submit', e)">
     <slot/>
-    <AsyncButton center type="submit" :loading="loading">
-      {{ submitLabel }}
+    <AsyncButton center type="submit" :loading="props.loading">
+      {{ props.buttonLabel }}
     </AsyncButton>
   </form>
 </template>
 
 <script lang="ts" setup>
-
-declare type OnSubmitCallback = (event: SubmitEvent) => Promise<void>;
-
 interface FormSectionProps {
-  onSubmit: OnSubmitCallback,
   loading?: boolean,
-  submitLabel?: string
+  buttonLabel?: string
 }
 
-const { onSubmit, submitLabel, loading } = withDefaults(
-    defineProps<FormSectionProps>(),
-    { loading: false, submitLabel: 'Submit' },
-);
+const props = withDefaults(defineProps<FormSectionProps>(), { loading: false, buttonLabel: 'Submit' });
 
 const emit = defineEmits(['submit']);
-
-const onSubmitDelegate = (e) => emit('submit', e);
-
 </script>
 
 <style lang="scss" scoped>
@@ -34,7 +24,7 @@ const onSubmitDelegate = (e) => emit('submit', e);
   flex-direction: column;
   height: 100%;
 
-  > :deep:not(:last-child) {
+  > :deep(:not(:last-child)) {
     margin-bottom: 2rem;
   }
 }

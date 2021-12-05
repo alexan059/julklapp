@@ -3,7 +3,6 @@ import { ServerResponse } from 'http';
 import { createError, sendError, useBody, useQuery } from 'h3';
 import {
     createGroup,
-    groupNameExists,
     groupUIDExists,
     getGroupByUID,
     getGroupsByUserId,
@@ -38,9 +37,6 @@ export default async (req: SessionRequest, res: ServerResponse) => {
         }
         case 'POST': {
             const { name, description } = await useBody(req);
-            if (await groupNameExists(name)) {
-                return sendError(res, createError({ statusCode: 400, statusMessage: 'Name already exists.' }));
-            }
             if (isEmpty(name)) {
                 return sendError(res, createError({ statusCode: 400, statusMessage: 'Name cannot be empty.' }));
             }

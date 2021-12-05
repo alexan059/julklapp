@@ -1,25 +1,29 @@
-import pool from '~/server/services/database';
-import { Group } from '~/server/queries/group';
+import runQuery, { transformAffected, transformFirst } from '~/server/helpers/database';
+import { User } from '~/types';
 
-export interface User {
-    id: number;
-    email: string;
-    role: 'user' | 'admin';
-    otp: string | null;
-    created_at: Date;
-    updated_at: Date;
-    email_confirmed: boolean;
+export async function createUser(email: string): Promise<User> {
+    return runQuery(
+        `INSERT INTO users (email)
+         VALUES ($1)`,
+        [email],
+        transformFirst,
+    );
 }
 
-export async function createUser(email): Promise<User> {
-    try {
-        const results = await pool.query('INSERT INTO users (email) VALUES ($1)', [email]);
-    } catch (e) {
-        console.log(e);
-    }
+export async function updateUser(userId: number, { name, avatar, item_like, item_dislike }) {
+    return runQuery(
+        `UPDATE users
+         SET name = $1,
+             avatar = $2,
+             item_like = $3,
+             item_dislike = $4
+         WHERE id = $5`,
+        [name, avatar, item_like, item_dislike, userId],
+        transformAffected,
+    );
 }
 
-export async function getUsersByGroup(userId, groupUID) {
+/*export async function getUsersByGroup(userId: number, groupUID: string) {
     try {
         const results = await pool.query(
             `SELECT id, name
@@ -38,48 +42,34 @@ export async function getUsersByGroup(userId, groupUID) {
     } catch (e) {
         console.log(e);
     }
+}*/
+
+export async function getUserByEmail(email: string): Promise<User> {
+    return runQuery(
+        `SELECT id, email, name, role, email_confirmed, avatar, item_like, item_dislike
+         FROM users
+         WHERE email = $1`,
+        [email],
+        transformFirst,
+    );
 }
 
-export async function getUserByEmail(email): Promise<User> {
-    try {
-        const results = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-
-        if (results.rowCount !== 1) {
-            return;
-        }
-
-        return results.rows[0] as User;
-    } catch (e) {
-        console.log(e);
-    }
+export async function getUserById(userId: number): Promise<User> {
+    return runQuery(
+        `SELECT email, name, role, email_confirmed, avatar, item_like, item_dislike
+         FROM users
+         WHERE id = $1`,
+        [userId],
+        transformFirst,
+    );
 }
 
-export async function getUserById(userId): Promise<User> {
-    try {
-        const results = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
-
-        if (results.rowCount !== 1) {
-            return;
-        }
-
-        return results.rows[0] as User;
-    } catch (e) {
-        console.log(e);
-    }
-}
-
-export async function setUserEmailConfirmed(userId) {
-    try {
-        const results = await pool.query('UPDATE users SET email_confirmed = $1 WHERE id = $2', [true, userId]);
-    } catch (e) {
-        console.log(e);
-    }
-}
-
-export async function updateUserName(userId, name) {
-    try {
-        const results = await pool.query('UPDATE users SET name = $1 WHERE id = $2', [name, userId]);
-    } catch (e) {
-        console.log(e);
-    }
+export async function setUserEmailConfirmed(userId: number) {
+    return runQuery(
+        `UPDATE users
+         SET email_confirmed = TRUE
+         WHERE id = $2`,
+        [userId],
+        transformAffected,
+    );
 }

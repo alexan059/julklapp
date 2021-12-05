@@ -21,20 +21,23 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { ModalRef } from '~/components/Modal.vue';
 import useEmojis from '~/composables/useEmojis';
 
 interface EmojiPickerProps {
+  modelValue?: string,
   default?: string;
   caption?: string;
 }
 
-const props = withDefaults(defineProps<EmojiPickerProps>(), { default: '😀', caption: '' });
+const props = withDefaults(defineProps<EmojiPickerProps>(), { default: '😀', caption: '', modelValue: '' });
+
+const emit = defineEmits(['update:modelValue']);
 
 const state = reactive({
   open: false,
-  char: props.default,
+  char: props.modelValue.length > 0 ? props.modelValue : props.default,
   group: '',
 });
 
@@ -51,6 +54,7 @@ function take({ char }: Emoji) {
   modal.value?.hide();
   state.char = char;
   state.open = false;
+  emit('update:modelValue', char);
 }
 
 </script>
@@ -59,7 +63,7 @@ function take({ char }: Emoji) {
 .avatar {
   cursor: pointer;
 
-  :deep .emoji {
+  :deep(.emoji) {
     height: 4em;
     width: 4em;
   }
@@ -71,16 +75,13 @@ function take({ char }: Emoji) {
   justify-content: space-around;
   margin-bottom: 1rem;
 
-  :deep .emoji {
-    height: 2em;
-    width: 2em;
-
+  :deep(.emoji) {
     &:hover {
       transform: scale(1.5);
     }
   }
 
-  .selected :deep .emoji {
+  .selected :deep(.emoji) {
     transform: scale(1.5);
   }
 }
@@ -100,7 +101,7 @@ function take({ char }: Emoji) {
   background-color: #f0f0f0;
   border-radius: 20px;
 
-  :deep .emoji {
+  :deep(.emoji) {
     height: 2em;
     width: 2em;
     padding: .25em;

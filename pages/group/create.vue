@@ -26,12 +26,13 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, inject } from 'vue';
+import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import useGroups from '~/composables/useGroups';
 
 const router = useRouter();
 
-const updateGroups = inject('updateGroups');
+const [_, { createGroup }] = useGroups();
 
 const initialState = {
   name: '',
@@ -44,28 +45,17 @@ const state = reactive({ ...initialState });
 
 async function onSubmit() {
   state.loading = true;
-  const { exists } = await $fetch('/api/group/exists', { params: { name: state.name } });
+  state.error = '';
 
-  if (exists) {
-    state.error = 'Name already exists.';
+  const { uid, error } = await createGroup(state.name, state.description);
+
+  if (error) {
+    state.error = error;
     state.loading = false;
     return;
   }
 
-  try {
-    const result = await $fetch('/api/group', {
-      method: 'POST',
-      body: { name: state.name, description: state.description },
-    });
-
-    await updateGroups();
-    await router.push(`/group/${ result.uid }`);
-
-    console.log(result);
-  } catch (e) {
-    state.error = e.data.statusMessage;
-    state.loading = false;
-  }
+  await router.push(`/group/${ uid }`);
 }
 
 </script>
