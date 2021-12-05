@@ -12,7 +12,7 @@ export default function () {
         return localStorage.getItem(key);
     }
 
-    const storeValue = (key: string, value: string) => {
+    const storeValue = (key: string, value: any) => {
         localStorage.setItem(key, value);
     }
 
@@ -24,13 +24,16 @@ export default function () {
         return !!localStorage.getItem(key);
     }
 
+    const clearStorage = () => localStorage.clear();
+
     return {
         getItem,
         storeItem,
         getValue,
         storeValue,
         valueExists,
-        removeItem
+        removeItem,
+        clearStorage
     }
 
 }

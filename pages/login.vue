@@ -36,14 +36,16 @@
 
 <script lang="ts" setup>
 import { useState } from '#app';
-import { reactive, ref, nextTick } from 'vue';
+import { reactive, ref, nextTick, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import useTimer from '~/composables/useTimer';
+import useAuth from '~/composables/useAuth';
 
 const { query } = useRoute();
 const router = useRouter();
 
 const [time, startTimer, stopTimer] = useTimer();
+const {logIn, logOut} = useAuth();
 
 const email = useState<string>('email', () => 'alex@mail.de');
 const state = reactive({
@@ -51,6 +53,8 @@ const state = reactive({
   verification: false,
   error: '',
 });
+
+onMounted(() => logOut()); // login route is skipped if logged in
 
 const digitInput = ref<null | any>(null);
 
@@ -69,6 +73,7 @@ async function onDigitsChange(otp) {
 
       if (success) {
         stopTimer();
+        logIn();
         await router.push({ path: '/dashboard', query });
       }
     } catch (e) {
