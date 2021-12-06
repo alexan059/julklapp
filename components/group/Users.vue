@@ -20,7 +20,7 @@ const { users } = defineProps<GroupUsersProps>();
 <style lang="scss" scoped>
 .grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: .5rem;
 }
 
@@ -45,6 +45,8 @@ const { users } = defineProps<GroupUsersProps>();
   .name {
     font-size: 1.25rem;
     font-weight: 300;
+    word-break: break-all;
+    text-align: center;
   }
 }
 </style>

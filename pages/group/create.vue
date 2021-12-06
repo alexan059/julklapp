@@ -1,5 +1,5 @@
 <template>
-  <form class="form" @submit.prevent="onSubmit">
+  <FormSection @submit="onSubmit" :loading="state.loading" button-label="Create">
 
     <Title>Create a new Group</Title>
 
@@ -21,8 +21,7 @@
       <ErrorMessage v-if="state.error && !state.loading">{{ state.error }}</ErrorMessage>
     </transition>
 
-    <AsyncButton center type="submit" :loading="state.loading">Create</AsyncButton>
-  </form>
+  </FormSection>
 </template>
 
 <script lang="ts" setup>

@@ -39,7 +39,7 @@ useResizer(contentWrapper, innerContent);
   display: flex;
   flex-direction: column;
   min-width: 380px;
-  max-height: 70vh;
+  max-height: 60vh;
   overflow: hidden;
   background-color: #fcfcfc;
   border-radius: 16px;
@@ -53,6 +53,7 @@ useResizer(contentWrapper, innerContent);
   &__content-wrapper {
     display: flex;
     flex-direction: row;
+    max-height: 60vh;
   }
 
   &__body {
@@ -66,8 +67,6 @@ useResizer(contentWrapper, innerContent);
   &__sidebar {
     padding: 26px 36px;
     min-width: 150px;
-    width: 150px;
-    max-height: 60vh;
     background-color: #f0f0f0;
     overflow-y: auto;
   }

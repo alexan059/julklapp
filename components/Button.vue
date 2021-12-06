@@ -1,27 +1,25 @@
 <template>
-  <button :class="{ center, danger, primary, small }" v-bind="$props">
+  <button :class="{ center, danger, primary, small, bottom }" v-bind="$props">
     <slot/>
   </button>
 </template>
 
 <script lang="ts" setup>
-defineProps({
-  center: {
-    type: Boolean,
-    default: false,
-  },
-  primary: {
-    type: Boolean,
-    default: false
-  },
-  danger: {
-    type: Boolean,
-    default: false
-  },
-  small: {
-    type: Boolean,
-    default: false
-  }
+interface ButtonProps {
+  disabled?: boolean;
+  center?: boolean;
+  danger?: boolean;
+  primary?: boolean;
+  small?: boolean;
+  bottom?: boolean;
+}
+
+const { center, danger, primary, small, bottom } = withDefaults(defineProps<ButtonProps>(), {
+  center: false,
+  danger: false,
+  primary: false,
+  small: false,
+  bottom: false,
 });
 </script>
 
@@ -62,6 +60,10 @@ button {
     align-self: center;
   }
 
+  &.bottom {
+    margin-top: auto;
+  }
+
   &:hover {
     cursor: pointer;
     background-color: darken(#999999, 5%);
@@ -69,6 +71,7 @@ button {
     &.danger {
       background-color: darken(#ff4757, 25%);
     }
+
     &.primary {
       background-color: darken(#5352ed, 5%);
     }
@@ -80,6 +83,7 @@ button {
     &.danger {
       background-color: darken(#ff4757, 10%);
     }
+
     &.primary {
       background-color: lighten(#5352ed, 10%);
     }

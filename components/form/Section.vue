@@ -1,7 +1,7 @@
 <template>
   <form class="form" @submit.prevent="(e) => emit('submit', e)">
     <slot/>
-    <AsyncButton center type="submit" :loading="props.loading">
+    <AsyncButton center bottom type="submit" :loading="props.loading">
       {{ props.buttonLabel }}
     </AsyncButton>
   </form>

@@ -3,7 +3,7 @@
 
     <Title>Profile</Title>
 
-    <p>Edit your profile here.</p>
+    <p>Edit your profile here. You can click on the emojis.</p>
 
     <div class="half">
       <EmojiPicker caption="Choose your avatar" v-model="state.avatar"/>
