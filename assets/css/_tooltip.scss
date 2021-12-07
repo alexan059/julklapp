@@ -1,0 +1,31 @@
+.tooltip {
+  position: relative;
+
+  &:after {
+    content: attr(aria-label);
+    position: absolute;
+    background: rgba(25, 25, 25, .95);
+    padding: 6px 12px;
+    color: #fcfcfc;
+    font-size: 12px;
+    white-space: nowrap;
+    border-radius: 8px;
+
+    left: 50%;
+    top: -130%;
+    transform: translateX(-50%);
+  }
+
+  &:before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 6px solid rgba(25, 25, 25, .95);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -30%;
+  }
+}
