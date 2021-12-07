@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
-    "@types/connect-pg-simple": "^4.2.4",
+    "@types/connect-pg-simple": "^7.0.0",
     "@types/express-session": "^1.17.4",
     "@types/nodemailer": "^6.4.4",
     "@types/pg": "^8.6.1",
