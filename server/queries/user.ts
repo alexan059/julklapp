@@ -2,7 +2,7 @@ import runQuery, { transformAffected, transformFirst } from '~/server/helpers/da
 import { User } from '~/types';
 
 export async function createUser(email: string): Promise<User> {
-    return runQuery(
+    return await runQuery(
         `INSERT INTO users (email)
          VALUES ($1)`,
         [email],
@@ -11,7 +11,7 @@ export async function createUser(email: string): Promise<User> {
 }
 
 export async function updateUser(userId: number, { name, avatar, item_like, item_dislike }) {
-    return runQuery(
+    return await runQuery(
         `UPDATE users
          SET name         = $1,
              avatar       = $2,
@@ -24,7 +24,7 @@ export async function updateUser(userId: number, { name, avatar, item_like, item
 }
 
 export async function getUsersByGroup(userId: number, groupUID: string): Promise<User[]> {
-    return runQuery(
+    return await runQuery(
         `SELECT name, avatar
          FROM users
          WHERE id IN (
@@ -41,7 +41,7 @@ export async function getUsersByGroup(userId: number, groupUID: string): Promise
 }
 
 export async function getUserByEmail(email: string): Promise<User> {
-    return runQuery(
+    return await runQuery(
         `SELECT id,
                 email,
                 name,
@@ -58,7 +58,7 @@ export async function getUserByEmail(email: string): Promise<User> {
 }
 
 export async function getUserById(userId: number): Promise<User> {
-    return runQuery(
+    return await runQuery(
         `SELECT email, name, role, email_confirmed, avatar, item_like, item_dislike
          FROM users
          WHERE id = $1`,
@@ -68,7 +68,7 @@ export async function getUserById(userId: number): Promise<User> {
 }
 
 export async function setUserEmailConfirmed(userId: number) {
-    return runQuery(
+    return await runQuery(
         `UPDATE users
          SET email_confirmed = TRUE
          WHERE id = $2`,
