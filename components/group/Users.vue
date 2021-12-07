@@ -1,8 +1,12 @@
 <template>
   <div class="grid">
-    <div class="user" v-for="user in users" :key="user.name">
+    <div :class="['user', {'match':user?.item_like}]" v-for="user in users" :key="user.name">
       <EmojiIcon class="avatar" :char="user.avatar"/>
       <span class="name">{{ user.name }}</span>
+      <div class="items" v-if="user?.item_like">
+        <EmojiIcon class="item tooltip" aria-label="I like" :char="user.item_like"/>
+        <EmojiIcon class="item tooltip" aria-label="I dislike" :char="user.item_dislike"/>
+      </div>
     </div>
   </div>
 </template>
@@ -33,6 +37,10 @@ const { users } = defineProps<GroupUsersProps>();
   border-radius: 20px;
   border: 2px solid #f0f0f0;
 
+  &.match {
+    border-color: lighten(#ff4757, 20%);
+  }
+
   .avatar {
     margin-bottom: .25rem;
 
@@ -47,6 +55,13 @@ const { users } = defineProps<GroupUsersProps>();
     font-weight: 300;
     word-break: break-all;
     text-align: center;
+  }
+
+  .items {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
   }
 }
 </style>

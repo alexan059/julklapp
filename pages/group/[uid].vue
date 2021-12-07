@@ -4,7 +4,7 @@
     <div class="content" v-else>
       <Title>{{ data.group.name }}</Title>
       <ul class="actions">
-        <li>
+        <li v-if="!data.group.is_closed">
           <Modal @show="onOpenModal" @hide="onCloseModal" ref="invitationModal">
             Invite
             <template #body>
@@ -60,7 +60,7 @@ const router = useRouter();
 
 const [_, { deleteGroup, leaveGroup, fetchGroup, createInvitation, closeGroup }] = useGroups();
 
-const { data, pending } = useLazyAsyncData('group', () => fetchGroup(params.uid as string), { server: false });
+const { data, pending, refresh } = useLazyAsyncData('group', () => fetchGroup(params.uid as string), { server: false });
 
 const invitationURL = ref('');
 const invitationModal = ref(null);
@@ -89,6 +89,7 @@ async function onOpenModal() {
 
 async function onCloseGroup() {
   await closeGroup(params.uid as string);
+  await refresh(true);
 }
 
 </script>

@@ -24,8 +24,8 @@ export async function updateUser(userId: number, { name, avatar, item_like, item
 }
 
 export async function getUsersByGroup(userId: number, groupUID: string): Promise<User[]> {
-    return await runQuery(
-        `SELECT name, avatar
+    const users = await runQuery(
+        `SELECT id, name, avatar, item_like, item_dislike
          FROM users
          WHERE id IN (
              SELECT user_id
@@ -36,8 +36,28 @@ export async function getUsersByGroup(userId: number, groupUID: string): Promise
                  WHERE uid = $1
              )
          )`,
-        [groupUID], // TODO never return group users when not logged in
+        [groupUID],
+    ) as User[];
+
+    const takerId = await runQuery(
+        `SELECT id
+         FROM users
+         WHERE id IN (
+             SELECT user_taker_id
+             FROM user_pairs
+             WHERE group_id IN (
+                 SELECT id
+                 FROM groups
+                 WHERE uid = $1
+             )
+               AND user_giver_id = $2
+         )`,
+        [groupUID, userId],
+        (result) => result.rowCount > 0 ? result.rows[0].id : null,
     );
+
+    return users.map(({ id, item_like, item_dislike, ...user }) =>
+        takerId === id ? { ...user, item_like, item_dislike } : { ...user }) as User[];
 }
 
 export async function getUserByEmail(email: string): Promise<User> {

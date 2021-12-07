@@ -10,10 +10,11 @@
     font-size: 12px;
     white-space: nowrap;
     border-radius: 8px;
-
     left: 50%;
     top: -130%;
     transform: translateX(-50%);
+    transition: opacity 300ms ease-out;
+    opacity: 0;
   }
 
   &:before {
@@ -25,7 +26,13 @@
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
     left: 50%;
-    transform: translateX(-50%);
     top: -30%;
+    transform: translateX(-50%) translateY(1px);
+    transition: opacity 300ms ease-out;
+    opacity: 0;
+  }
+
+  &:hover:before, &:hover:after {
+    opacity: 1
   }
 }

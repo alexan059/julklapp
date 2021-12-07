@@ -11,11 +11,11 @@
       </label>
     </Field>
 
-    <Field>
+<!--    <Field>
       <label>
         <textarea placeholder="Description" rows="4" v-model.trim="state.description"></textarea>
       </label>
-    </Field>
+    </Field>-->
 
     <transition name="fade" mode="out-in">
       <ErrorMessage v-if="state.error && !state.loading">{{ state.error }}</ErrorMessage>
