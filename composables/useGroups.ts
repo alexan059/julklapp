@@ -76,6 +76,14 @@ export default function () {
         return { success, redirect };
     };
 
+    const closeGroup = async (uid: string) => {
+        const { success } = await $fetch('/api/group/close', { method: 'POST', body: { uid } });
+
+        success && await fetchGroups(true);
+
+        return success;
+    };
+
     const groupActions = {
         fetchGroup,
         fetchGroups,
@@ -83,6 +91,7 @@ export default function () {
         deleteGroup,
         joinGroup,
         leaveGroup,
+        closeGroup,
         provideGroups,
         createInvitation,
     };

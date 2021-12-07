@@ -5,10 +5,11 @@ type CustomSession = Session & { loggedIn: boolean, userId: number };
 type SessionRequest = IncomingMessage & { session: CustomSession };
 
 export interface Group {
-    name: string,
-    description: string,
-    uid: string,
-    is_admin?: boolean,
+    name: string;
+    description: string;
+    uid: string;
+    is_closed: boolean;
+    is_admin?: boolean;
 }
 
 declare type GroupList = Group[];

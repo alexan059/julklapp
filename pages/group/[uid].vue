@@ -5,7 +5,7 @@
       <Title>{{ data.group.name }}</Title>
       <ul class="actions">
         <li>
-          <Modal @show="onOpenModal" @hide="onHideModal" ref="invitationModal">
+          <Modal @show="onOpenModal" @hide="onCloseModal" ref="invitationModal">
             Invite
             <template #body>
               <transition name="fade" mode="out-in">
@@ -24,8 +24,8 @@
             </template>
           </Modal>
         </li>
-        <li v-if="data.group.is_admin">
-          <button>Close</button>
+        <li v-if="data.group.is_admin && !data.group.is_closed">
+          <button @click="onCloseGroup">Close</button>
         </li>
         <li v-if="data.group.is_admin">
           <Prompt @confirm="onDeleteGroup">
@@ -58,7 +58,7 @@ import useGroups from '~/composables/useGroups';
 const { params, fullPath } = useRoute();
 const router = useRouter();
 
-const [_, { deleteGroup, leaveGroup, fetchGroup, createInvitation }] = useGroups();
+const [_, { deleteGroup, leaveGroup, fetchGroup, createInvitation, closeGroup }] = useGroups();
 
 const { data, pending } = useLazyAsyncData('group', () => fetchGroup(params.uid as string), { server: false });
 
@@ -81,10 +81,14 @@ async function onLeaveGroup() {
   await router.push('/dashboard');
 }
 
-const onHideModal = () => invitationURL.value = '';
+const onCloseModal = () => invitationURL.value = '';
 
 async function onOpenModal() {
   invitationURL.value = await createInvitation(params.uid as string);
+}
+
+async function onCloseGroup() {
+  await closeGroup(params.uid as string);
 }
 
 </script>
