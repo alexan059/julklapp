@@ -1,10 +1,12 @@
 <template>
-  <button :class="{ center, danger, primary, small, bottom }" v-bind="$props">
+  <button :class="{ center, danger, primary, small, bottom }" :disabled="disabled">
     <slot/>
   </button>
 </template>
 
 <script lang="ts" setup>
+import { toRefs } from 'vue';
+
 interface ButtonProps {
   disabled?: boolean;
   center?: boolean;
@@ -14,13 +16,16 @@ interface ButtonProps {
   bottom?: boolean;
 }
 
-const { center, danger, primary, small, bottom } = withDefaults(defineProps<ButtonProps>(), {
+const props = withDefaults(defineProps<ButtonProps>(), {
+  disabled: false,
   center: false,
   danger: false,
   primary: false,
   small: false,
   bottom: false,
 });
+
+const { center, danger, primary, small, bottom, disabled } = toRefs(props);
 </script>
 
 <style lang="scss" scoped>

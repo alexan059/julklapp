@@ -45,7 +45,7 @@ const { query } = useRoute();
 const router = useRouter();
 
 const [time, startTimer, stopTimer] = useTimer();
-const {logIn, logOut} = useAuth();
+const { logIn, logOut } = useAuth();
 
 const email = useState<string>('email', () => 'alex@mail.de');
 const state = reactive({

@@ -1,6 +1,6 @@
 <template>
   <div class="grid">
-    <div :class="['user', {'match':user?.item_like}]" v-for="user in users" :key="user.name">
+    <div :class="['user', { 'match': user?.item_like }]" v-for="user in users" :key="user.name">
       <EmojiIcon class="avatar" :char="user.avatar"/>
       <span class="name">{{ user.name }}</span>
       <div class="items" v-if="user?.item_like">
@@ -12,13 +12,16 @@
 </template>
 
 <script lang="ts" setup>
+import { toRefs } from 'vue';
 import { User } from '~/types';
 
 interface GroupUsersProps {
   users: User[];
 }
 
-const { users } = defineProps<GroupUsersProps>();
+const props = defineProps<GroupUsersProps>();
+
+const { users } = toRefs(props);
 </script>
 
 <style lang="scss" scoped>

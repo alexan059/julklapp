@@ -1,15 +1,19 @@
 <template>
-  <h3 :class="['title', {center}]">
+  <h3 :class="['title', { center }]">
     <slot/>
   </h3>
 </template>
 
 <script lang="ts" setup>
+import { toRefs } from 'vue';
+
 interface TitleProps {
   center?: boolean;
 }
 
-const { center } = withDefaults(defineProps<TitleProps>(), { center: false });
+const props = withDefaults(defineProps<TitleProps>(), { center: false });
+
+const { center } = toRefs(props);
 </script>
 
 <style lang="scss" scoped>

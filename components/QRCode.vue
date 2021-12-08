@@ -1,29 +1,26 @@
 <template>
-  <img ref="codeImage" :src="codeImage.imageURL" :alt="codeImage.text">
+  <img ref="codeImage" :src="imageURL" :alt="text">
 </template>
 
 <script lang="ts" setup>
-import { watchEffect, reactive } from 'vue';
+import { watchEffect, toRefs, ref } from 'vue';
 import QRCode from 'qrcode';
 
 interface QRCodeProps {
   text: string;
 }
 
-const { text } = withDefaults(defineProps<QRCodeProps>(), { text: '' });
+const props = withDefaults(defineProps<QRCodeProps>(), { text: '' });
 
-const codeImage = reactive({
-  text,
-  imageURL: '',
-});
+const { text } = toRefs(props);
+
+const imageURL = ref('');
 
 watchEffect(async () => {
-  if (codeImage.text) {
-    codeImage.imageURL = await QRCode.toDataURL(codeImage.text, {
-      errorCorrectionLevel: 'L',
-      color: { light: '#fcfcfc' },
-    });
-  }
+  imageURL.value = await QRCode.toDataURL(text.value, {
+    errorCorrectionLevel: 'L',
+    color: { light: '#fcfcfc' },
+  });
 });
 
 </script>

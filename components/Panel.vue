@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, toRefs } from 'vue';
 import useResizer from '~/composables/useResizer';
 
 interface PanelProps {
@@ -25,7 +25,8 @@ interface PanelProps {
   width?: 'auto' | string;
 }
 
-const { layout, width } = withDefaults(defineProps<PanelProps>(), { layout: 'default', width: 'auto' });
+const props = withDefaults(defineProps<PanelProps>(), { layout: 'default', width: 'auto' });
+const { layout, width } = toRefs(props);
 
 const contentWrapper = ref<null | any>(null);
 const innerContent = ref<null | any>(null);
