@@ -3,24 +3,26 @@
     <form @submit.prevent="submit">
       <Panel>
 
-        <transition name="fade" mode="out-in">
-          <HeroTitle v-if="!state.verification">Login</HeroTitle>
-          <HeroTitle v-else>Type your code</HeroTitle>
-        </transition>
+        <div class="form">
+          <transition name="fade" mode="out-in">
+            <HeroTitle v-if="!state.verification">Login</HeroTitle>
+            <HeroTitle v-else>Type your code</HeroTitle>
+          </transition>
 
-        <transition @after-enter="afterEnter" name="fade" mode="out-in">
-          <Field v-if="!state.verification" description="Type your email to receive a login url.">
-            <label>
-              <IconEnvelope/>
-              <input placeholder="Email" type="email" name="email" v-model.trim="email">
-            </label>
-          </Field>
-          <DigitInput v-else ref="digitInput" :disabled="state.loading" @change="onDigitsChange"/>
-        </transition>
+          <transition @after-enter="afterEnter" name="fade" mode="out-in">
+            <Field v-if="!state.verification" description="Type your email to receive a login url.">
+              <label>
+                <IconEnvelope/>
+                <input ref="emailInput" placeholder="Email" type="email" name="email" v-model.trim="email">
+              </label>
+            </Field>
+            <DigitInput v-else ref="digitInput" :disabled="state.loading" @change="onDigitsChange"/>
+          </transition>
 
-        <transition name="fade">
-          <ErrorMessage v-if="state.error && !state.loading">{{ state.error }}</ErrorMessage>
-        </transition>
+          <transition name="fade">
+            <ErrorMessage v-if="state.error && !state.loading">{{ state.error }}</ErrorMessage>
+          </transition>
+        </div>
 
         <template #footer>
           <AsyncButton type="submit" center :disabled="state.verification" :loading="state.loading">
@@ -54,11 +56,15 @@ const state = reactive({
   error: '',
 });
 
-onMounted(() => logOut()); // login route is skipped if logged in
+onMounted(() => {
+  logOut(); // login route is skipped if logged in
+  emailInput.value?.focus();
+});
 
 const digitInput = ref<null | any>(null);
+const emailInput = ref<null | any>(null);
 
-function afterEnter() {
+async function afterEnter() {
   state.loading = false;
   digitInput.value?.focus();
 }
@@ -90,21 +96,32 @@ async function onDigitsChange(otp) {
 async function submit() {
   state.error = '';
   state.loading = true;
-  const { expires, success } = await $fetch('/api/auth', { method: 'POST', body: { email: email.value } });
 
-  if (success) {
+  try {
+    const { expires, success } = await $fetch('/api/auth', { method: 'POST', body: { email: email.value } });
+
+    if (success) {
+      state.loading = false;
+      state.verification = true;
+      startTimer(expires, () => {
+        state.error = 'Timeout.';
+        state.verification = false;
+        state.loading = true;
+      });
+    }
+  } catch (e) {
     state.loading = false;
-    state.verification = true;
-    startTimer(expires, () => {
-      state.error = 'Timeout.';
-      state.verification = false;
-      state.loading = true;
-    });
+    state.error = 'Email invalid.';
+    emailInput.value?.focus();
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
+.form {
+  > *:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+}
 </style>
 
