@@ -1,3 +1,4 @@
+import config from '#config';
 import pg from 'pg';
 
 const { Pool } = pg;
@@ -6,10 +7,10 @@ const { Pool } = pg;
 // https://node-postgres.com/api/pool
 
 const pool = new Pool({
-    user: 'postgres',
-    password: 'changeme',
-    host: 'localhost',
-    database: 'secret_friend',
+    user: config.PG_USER,
+    password: config.PG_PASSWORD,
+    host: config.PG_HOST,
+    database: config.PG_DATABASE,
     port: 5432,
 });
 

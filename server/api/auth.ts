@@ -28,10 +28,9 @@ export default async (req: SessionRequest, res: ServerResponse) => {
 
     if (!otp) {
         const { digits, expires } = await generateOTP(email);
-        // if (!await sendOTPMail(email, digits)) {
-        //     return sendError(res, createError({ statusCode: 500 }));
-        // }
-        console.log(digits);
+        if (!await sendOTPMail(email, digits)) {
+            return sendError(res, createError({ statusCode: 500 }));
+        }
 
         return res.end(JSON.stringify({ expires, success: true }));
     }

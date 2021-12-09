@@ -23,3 +23,22 @@ export interface User {
     item_like: string;
     item_dislike: string;
 }
+
+declare module '@nuxt/schema' {
+    interface PublicRuntimeConfig {
+
+    }
+
+    interface PrivateRuntimeConfig {
+        ENVIRONMENT: string;
+        SESSION_SECRET: string;
+        PG_USER: string;
+        PG_PASSWORD: string;
+        PG_HOST: string;
+        PG_DATABASE: string;
+        EMAIL_DEBUG: boolean;
+        SMTP_HOST: string;
+        SMTP_USER: string;
+        SMTP_PASS: string;
+    }
+}
