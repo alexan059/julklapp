@@ -5,3 +5,4 @@ nuxt.d.ts
 .output
 .idea
 .components.gen.js
+.env
