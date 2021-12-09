@@ -10,7 +10,7 @@
           </transition>
 
           <transition @after-enter="afterEnter" name="fade" mode="out-in">
-            <Field v-if="!state.verification" description="Type your email to receive a login url.">
+            <Field v-if="!state.verification" description="Type your email to receive a login code.">
               <label>
                 <IconEnvelope/>
                 <input ref="emailInput" placeholder="Email" type="email" name="email" v-model.trim="email">

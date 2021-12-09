@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative">
+  <div>
     <div id="snow"/>
     <NuxtPage/>
   </div>

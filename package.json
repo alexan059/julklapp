@@ -23,6 +23,7 @@
     "connect-pg-simple": "^7.0.0",
     "emoji.json": "^13.1.0",
     "express-session": "^1.17.2",
+    "gsap": "^3.8.0",
     "nanoid": "^3.1.30",
     "nodemailer": "^6.7.1",
     "otp-generator": "^3.0.0",

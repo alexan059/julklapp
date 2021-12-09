@@ -41,7 +41,7 @@ button {
   border-radius: 50px;
   padding: .75rem 1.125rem;
   font-size: 18px;
-  font-weight: 300;
+  font-weight: 400;
   background-color: #999999;
   color: #fcfcfc;
 
