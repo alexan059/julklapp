@@ -8,7 +8,7 @@
     <div class="half">
       <EmojiPicker caption="Choose your avatar" v-model="state.avatar"/>
 
-      <Field class="fullwidth" description="Choose your avatar emoji on the left (click).">
+      <Field class="fullwidth" description="Choose your nickname">
         <label>
           <input placeholder="Name" type="text" v-model.trim="state.name">
         </label>
@@ -90,6 +90,14 @@ async function onSubmit() {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+
+    @media screen and (max-width: 767px) {
+      width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    flex-direction: column;
   }
 }
 </style>

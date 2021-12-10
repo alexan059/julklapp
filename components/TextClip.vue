@@ -41,6 +41,7 @@ defineProps({
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 100%;
 
   padding: 4px 8px;
   border: 1px solid #e0e0e0;

@@ -6,6 +6,7 @@
 
 <style lang="scss" scoped>
 .center {
+  position: relative;
   height: 100vh;
   display: flex;
   justify-content: center;

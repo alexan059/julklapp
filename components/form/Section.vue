@@ -22,7 +22,6 @@ const emit = defineEmits(['submit']);
 .form {
   display: flex;
   flex-direction: column;
-  height: 100%;
 
   > :deep(:not(:last-child)) {
     margin-bottom: 2rem;

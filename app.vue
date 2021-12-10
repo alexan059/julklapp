@@ -1,8 +1,6 @@
 <template>
-  <div>
-    <div id="snow"/>
-    <NuxtPage/>
-  </div>
+  <div id="snow"/>
+  <NuxtPage/>
 </template>
 
 <script lang="ts" setup>

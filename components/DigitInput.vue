@@ -47,33 +47,29 @@ function onInput(e: InputEvent) {
   const target = e.target as HTMLInputElement;
   const index = [...target.parentElement.children].indexOf(target);
 
+  const nextTarget = target.nextSibling as HTMLInputElement;
+
+  if (!isFinite(e.data as number)) {
+    target.value = '';
+    return;
+  }
+
+  if (nextTarget instanceof HTMLInputElement) {
+    nextTarget.focus();
+  }
+
   digits[index] = target.value;
   emit('change', digits.join(''));
 }
 
 function onKeyDown(e: KeyboardEvent) {
   const target = e.target as HTMLInputElement;
-  const nextTarget = target.nextSibling as HTMLInputElement;
   const prevTarget = target.previousSibling as HTMLInputElement;
 
-  e.preventDefault();
-
-  if (isFinite(e.key as number)) {
-    target.value = e.key;
-    target.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
-  }
-
-  if (nextTarget instanceof HTMLInputElement && isFinite(e.key as number)) {
-    nextTarget.focus();
-  } else if (prevTarget instanceof HTMLInputElement && e.key === 'Backspace') {
-    if (target.value === '') {
-      prevTarget.value = '';
-      prevTarget.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
-      prevTarget.focus();
-    } else {
-      target.value = '';
-      target.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
-    }
+  if (prevTarget instanceof HTMLInputElement && e.key === 'Backspace') {
+    prevTarget.value = '';
+    prevTarget.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+    prevTarget.focus();
   }
 }
 </script>

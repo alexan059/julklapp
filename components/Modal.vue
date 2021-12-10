@@ -46,7 +46,7 @@ const hide = () => {
   emit('hide');
 };
 
-defineExpose<Modal>({
+defineExpose<ModalExpose>({
   show,
   hide,
 });
@@ -66,7 +66,6 @@ defineExpose<Modal>({
     left: 0;
     width: 100vw;
     height: 100vh;
-
     background-color: rgba(0, 0, 0, .25);
   }
 

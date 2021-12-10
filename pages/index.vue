@@ -4,10 +4,10 @@
       <div class="wrapper">
         <div class="heading">
           <h1 class="title">
-            <span ref="titleRef">JulklAPP</span>
-            <div ref="presentRef">
+            <span class="text" ref="titleRef">JulklAPP</span>
+            <span class="emoji" ref="presentRef">
               <EmojiIcon char="🎁"/>
-            </div>
+            </span>
           </h1>
           <h2 ref="subtitleRef" class="subtitle">Connect with your friends</h2>
           <div ref="buttonRef" class="action">
@@ -17,7 +17,7 @@
         </div>
       </div>
     </section>
-    <section ref="info1Ref" class="info">
+    <section ref="info1Ref" class="info reverse">
       <div class="image">
         <img ref="image1Ref" src="~/assets/img/groups.png" alt="groups">
       </div>
@@ -40,7 +40,7 @@
         <img ref="image2Ref" src="~/assets/img/profile.png" alt="profile">
       </div>
     </section>
-    <section ref="info3Ref" class="info">
+    <section ref="info3Ref" class="info reverse">
       <div class="image">
         <img ref="image3Ref" src="~/assets/img/qrcode.png" alt="qrcode">
       </div>
@@ -65,6 +65,7 @@ import useAuth from '~/composables/useAuth';
 import { onMounted, ref } from 'vue';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Tween = gsap.core.Tween;
 
 if (process.client) {
   gsap.registerPlugin(ScrollTrigger);
@@ -98,149 +99,296 @@ const { isLoggedIn } = useAuth();
 
 const loggedIn = ref(false);
 
+const tween = ref([]);
+
+declare type LayoutChangeCallbackFunction = (matches: boolean) => void;
+
+function addMediaQueryWatcher(mediaQuery: string, layoutChangedCallback: LayoutChangeCallbackFunction) {
+  const mediaQueryList = window.matchMedia(mediaQuery);
+  mediaQueryList.addEventListener('change', function (e) { return layoutChangedCallback(e.matches); });
+  layoutChangedCallback(mediaQueryList.matches);
+}
+
 onMounted(() => {
+
+  addMediaQueryWatcher('(max-width: 767px)', (matches) => {
+    // reset all tweens
+    tween.value = tween.value.filter((tween: Tween) => {
+      tween.invalidate(); // initial position
+      tween.kill(); // remove gsap from element
+    }); // filter will always return false = empty array
+
+    if (matches) {
+
+      tween.value.push(gsap.to(titleRef.value, {
+        scrollTrigger: {
+          trigger: heroRef.value,
+          start: 'center center',
+          scrub: true,
+        },
+        x: -500,
+      }));
+      tween.value.push(gsap.to(subtitleRef.value, {
+        scrollTrigger: {
+          trigger: heroRef.value,
+          start: 'center center',
+          scrub: true,
+        },
+        x: 500,
+      }));
+      tween.value.push(gsap.to(buttonRef.value, {
+        scrollTrigger: {
+          trigger: heroRef.value,
+          start: 'center center',
+          scrub: true,
+        },
+        y: 200,
+        scale: 2,
+        opacity: 0,
+      }));
+      tween.value.push(gsap.to(presentRef.value, {
+        scrollTrigger: {
+          trigger: heroRef.value,
+          start: 'center center',
+          scrub: true,
+        },
+        y: -300,
+        rotateZ: 100,
+      }));
+
+      tween.value.push(gsap.from(image1Ref.value, {
+        scrollTrigger: {
+          trigger: info1Ref.value,
+          toggleActions: 'restart play pause reverse',
+          start: 'center center+=100px',
+        },
+        x: -200,
+        opacity: 0,
+      }));
+      tween.value.push(gsap.from(heading1Ref.value, {
+        scrollTrigger: {
+          trigger: info1Ref.value,
+          start: 'top bottom',
+          end: 'center bottom',
+          scrub: true,
+        },
+        scale: 0.5,
+        opacity: 0,
+      }));
+      tween.value.push(gsap.from(text1Ref.value, {
+        scrollTrigger: {
+          trigger: info1Ref.value,
+          start: 'top bottom',
+          end: 'center bottom-=200px',
+          scrub: true,
+        },
+        scale: 0.5,
+        opacity: 0,
+      }));
+
+      tween.value.push(gsap.from(image2Ref.value, {
+        scrollTrigger: {
+          trigger: info2Ref.value,
+          toggleActions: 'restart play pause reverse',
+          start: 'center center',
+        },
+        x: 200,
+        opacity: 0,
+      }));
+      tween.value.push(gsap.from(heading2Ref.value, {
+        scrollTrigger: {
+          trigger: info2Ref.value,
+          start: 'top bottom',
+          end: 'center bottom',
+          scrub: true,
+        },
+        scale: 0.5,
+        opacity: 0,
+      }));
+      tween.value.push(gsap.from(text2Ref.value, {
+        scrollTrigger: {
+          trigger: info2Ref.value,
+          start: 'top bottom',
+          end: 'center bottom-=200px',
+          scrub: true,
+        },
+        scale: 0.5,
+        opacity: 0,
+      }));
+
+      tween.value.push(gsap.from(image3Ref.value, {
+        scrollTrigger: {
+          trigger: info3Ref.value,
+          toggleActions: 'restart play pause reverse',
+          start: 'center center',
+        },
+        x: -200,
+        opacity: 0,
+      }));
+      tween.value.push(gsap.from(heading3Ref.value, {
+        scrollTrigger: {
+          trigger: info3Ref.value,
+          start: 'top bottom',
+          end: 'center bottom',
+          scrub: true,
+        },
+        scale: 0.5,
+        opacity: 0,
+      }));
+      tween.value.push(gsap.from(text3Ref.value, {
+        scrollTrigger: {
+          trigger: info3Ref.value,
+          start: 'top bottom',
+          end: 'center bottom-=200px',
+          scrub: true,
+        },
+        scale: 0.5,
+        opacity: 0,
+      }));
+
+      tween.value.push(gsap.from(footerRef.value, {
+        scrollTrigger: {
+          trigger: footerButtonRef.value,
+          start: 'top bottom',
+          scrub: true,
+        },
+        y: -200,
+        scale: 0.5,
+      }));
+
+    } else {
+      tween.value.push(gsap.to(titleRef.value, {
+        scrollTrigger: {
+          trigger: heroRef.value,
+          start: 'center center',
+          scrub: true,
+        },
+        rotateZ: -100,
+        x: -500,
+        y: -400,
+      }));
+      tween.value.push(gsap.to(subtitleRef.value, {
+        scrollTrigger: {
+          trigger: heroRef.value,
+          start: 'center center',
+          scrub: true,
+        },
+        y: -300,
+      }));
+      tween.value.push(gsap.to(buttonRef.value, {
+        scrollTrigger: {
+          trigger: heroRef.value,
+          start: 'center center',
+          scrub: true,
+        },
+        y: 200,
+        scale: 2,
+        opacity: 0,
+      }));
+      tween.value.push(gsap.to(presentRef.value, {
+        scrollTrigger: {
+          trigger: heroRef.value,
+          start: 'center center',
+          scrub: true,
+        },
+        x: 300,
+        rotateZ: 100,
+      }));
+
+      tween.value.push(gsap.from(image1Ref.value, {
+        scrollTrigger: {
+          trigger: info1Ref.value,
+          toggleActions: 'restart play reverse reset',
+          start: 'top center',
+          end: 'top 100px',
+        },
+        x: -500,
+        opacity: 0,
+      }));
+      tween.value.push(gsap.to(heading1Ref.value, {
+        scrollTrigger: {
+          trigger: info1Ref.value,
+          start: 'center center+=100px',
+          scrub: true,
+        },
+        y: -400,
+      }));
+      tween.value.push(gsap.to(text1Ref.value, {
+        scrollTrigger: {
+          trigger: info1Ref.value,
+          start: 'center center+=100px',
+          scrub: true,
+        },
+        y: -300,
+      }));
+
+      tween.value.push(gsap.from(image2Ref.value, {
+        scrollTrigger: {
+          trigger: info2Ref.value,
+          toggleActions: 'restart play reverse reset',
+          start: 'top center',
+          end: 'top 100px',
+        },
+        x: 500,
+        opacity: 0,
+      }));
+      tween.value.push(gsap.to(heading2Ref.value, {
+        scrollTrigger: {
+          trigger: info2Ref.value,
+          start: 'center center+=100px',
+          scrub: true,
+        },
+        y: -400,
+      }));
+      tween.value.push(gsap.to(text2Ref.value, {
+        scrollTrigger: {
+          trigger: info2Ref.value,
+          start: 'center center+=100px',
+          scrub: true,
+        },
+        y: -300,
+      }));
+
+      tween.value.push(gsap.from(image3Ref.value, {
+        scrollTrigger: {
+          trigger: info3Ref.value,
+          toggleActions: 'restart play reverse reset',
+          start: 'top center',
+          end: 'top 100px',
+        },
+        x: -500,
+        opacity: 0,
+      }));
+      tween.value.push(gsap.to(heading3Ref.value, {
+        scrollTrigger: {
+          trigger: info3Ref.value,
+          start: 'center center+=100px',
+          scrub: true,
+        },
+        y: -400,
+      }));
+      tween.value.push(gsap.to(text3Ref.value, {
+        scrollTrigger: {
+          trigger: info3Ref.value,
+          start: 'center center+=100px',
+          scrub: true,
+        },
+        y: -300,
+      }));
+
+      tween.value.push(gsap.from(footerRef.value, {
+        scrollTrigger: {
+          trigger: footerButtonRef.value,
+          start: 'top bottom',
+          scrub: true,
+        },
+        y: -200,
+        scale: 0.5,
+      }));
+    }
+  });
+
   loggedIn.value = isLoggedIn();
-
-  gsap.to(titleRef.value, {
-    scrollTrigger: {
-      trigger: heroRef.value,
-      start: 'center center',
-      scrub: true,
-    },
-    rotateZ: -100,
-    x: -500,
-    y: -400,
-  });
-
-  gsap.to(subtitleRef.value, {
-    scrollTrigger: {
-      trigger: heroRef.value,
-      start: 'center center',
-      scrub: true,
-    },
-    y: -300,
-  });
-
-  gsap.to(buttonRef.value, {
-    scrollTrigger: {
-      trigger: heroRef.value,
-      start: 'center center',
-      scrub: true,
-    },
-    y: 200,
-    scale: 2,
-    opacity: 0,
-  });
-
-  gsap.to(presentRef.value, {
-    scrollTrigger: {
-      trigger: heroRef.value,
-      start: 'center center',
-      scrub: true,
-    },
-    x: 300,
-    rotateZ: 100,
-  });
-
-
-  gsap.from(image1Ref.value, {
-    scrollTrigger: {
-      trigger: info1Ref.value,
-      toggleActions: 'restart play reverse reset',
-      start: 'top center',
-      end: 'top 100px',
-    },
-    x: -500,
-    opacity: 0,
-  });
-
-  gsap.to(heading1Ref.value, {
-    scrollTrigger: {
-      trigger: info1Ref.value,
-      start: 'center center+=100px',
-      scrub: true,
-    },
-    y: -400,
-  });
-
-  gsap.to(text1Ref.value, {
-    scrollTrigger: {
-      trigger: info1Ref.value,
-      start: 'center center+=100px',
-      scrub: true,
-    },
-    y: -300,
-  });
-
-
-  gsap.from(image2Ref.value, {
-    scrollTrigger: {
-      trigger: info2Ref.value,
-      toggleActions: 'restart play reverse reset',
-      start: 'top center',
-      end: 'top 100px',
-    },
-    x: 500,
-    opacity: 0,
-  });
-
-  gsap.to(heading2Ref.value, {
-    scrollTrigger: {
-      trigger: info2Ref.value,
-      start: 'center center+=100px',
-      scrub: true,
-    },
-    y: -400,
-  });
-
-  gsap.to(text2Ref.value, {
-    scrollTrigger: {
-      trigger: info2Ref.value,
-      start: 'center center+=100px',
-      scrub: true,
-    },
-    y: -300,
-  });
-
-
-  gsap.from(image3Ref.value, {
-    scrollTrigger: {
-      trigger: info3Ref.value,
-      toggleActions: 'restart play reverse reset',
-      start: 'top center',
-      end: 'top 100px',
-    },
-    x: -500,
-    opacity: 0,
-  });
-
-  gsap.to(heading3Ref.value, {
-    scrollTrigger: {
-      trigger: info3Ref.value,
-      start: 'center center+=100px',
-      scrub: true,
-    },
-    y: -400,
-  });
-
-  gsap.to(text3Ref.value, {
-    scrollTrigger: {
-      trigger: info3Ref.value,
-      start: 'center center+=100px',
-      scrub: true,
-    },
-    y: -300,
-  });
-
-  gsap.from(footerRef.value, {
-    scrollTrigger: {
-      trigger: footerButtonRef.value,
-      start: 'top bottom',
-      scrub: true,
-    },
-    y: -200,
-    scale: 0.5,
-  });
 
 });
 
@@ -260,13 +408,10 @@ section {
 .hero {
   position: relative;
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
 
   .wrapper {
-    display: flex;
-    flex-direction: column;
     padding: 0 15%;
 
     .heading {
@@ -280,8 +425,17 @@ section {
         font-size: 8vw;
         font-weight: 700;
 
-        span {
+        .text {
           margin-right: 1rem;
+
+          @media screen and (max-width: 767px) {
+            margin-right: 0;
+          }
+        }
+
+        @media screen and (max-width: 767px) {
+          font-size: 12vw;
+          flex-direction: column-reverse;
         }
       }
 
@@ -289,6 +443,11 @@ section {
         margin: 0 0 2rem 0;
         font-size: 3vw;
         font-weight: 400;
+
+        @media screen and (max-width: 767px) {
+          font-size: 4vw;
+          text-align: center;
+        }
       }
 
       .action {
@@ -296,9 +455,14 @@ section {
         justify-content: center;
         align-items: center;
       }
+
+      @media screen and (max-width: 767px) {
+        text-align: center;
+      }
     }
   }
 }
+
 
 .info {
   display: flex;
@@ -322,18 +486,54 @@ section {
       margin: 0;
       font-size: 2.5rem;
       font-weight: 600;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.75rem;
+      }
     }
 
     p {
       margin: 0;
       font-size: 1.75rem;
       font-weight: 300;
-    }
 
+      @media screen and (max-width: 767px) {
+        font-size: 1.125rem;
+      }
+    }
 
     > *:not(:last-child) {
       margin-bottom: 2rem;
     }
+
+    @media screen and (max-width: 767px) {
+      padding: 2rem;
+      justify-content: flex-end;
+
+      &:last-child {
+        justify-content: flex-start;
+      }
+    }
+  }
+
+  &.reverse {
+    @media screen and (max-width: 767px) {
+      flex-direction: column-reverse;
+    }
+
+    > div {
+      @media screen and (max-width: 767px) {
+        justify-content: flex-start;
+
+        &:last-child {
+          justify-content: flex-end;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    flex-direction: column;
   }
 }
 
@@ -362,16 +562,21 @@ section {
   &.big {
     font-size: 48px;
     border-width: 4px;
+
+    @media screen and (max-width: 767px) {
+      font-size: 24px;
+      border-width: 2px;
+    }
   }
 
   &.indigo:hover {
     border-color: #5352ed;
     color: #5352ed;
   }
-}
 
-img {
-  width: 100%;
-  height: auto;
+  @media screen and (max-width: 767px) {
+    font-size: 12px;
+    border-width: 1px;
+  }
 }
 </style>

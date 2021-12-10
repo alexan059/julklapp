@@ -3,7 +3,7 @@
 
     <Title>Create a new Group</Title>
 
-    <p>Choose an appropriate name for your group.</p>
+    <p>Choose a name for your group.</p>
 
     <Field description="Only lowercase without special character and spaces.">
       <label>

@@ -1,6 +1,6 @@
 <template>
   <Center>
-    <Panel layout="sidebar" width="70vw">
+    <Panel class="wide" layout="sidebar">
 
       <template #sidebar>
         <Sidebar/>

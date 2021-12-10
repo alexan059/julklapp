@@ -13,10 +13,11 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { ModalRef } from '~/components/Modal.vue';
 
 const emit = defineEmits(['confirm']);
 
-const modal = ref(null);
+const modal = ref<ModalRef>(null);
 
 const confirm = () => {
   modal.value?.hide();
@@ -32,5 +33,9 @@ const cancel = () => modal.value?.hide();
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+
+  @media screen and (max-width: 767px) {
+    flex-direction: column;
+  }
 }
 </style>
