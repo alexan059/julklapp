@@ -73,3 +73,9 @@ docker compose exec -T postgres_container bash -c ''
 ```bash
 docker cp postgres_container:/dump.sql ./dump.sql
 ```
+
+## Create symlink on server
+
+```bash
+ln -s /opt/plesk/node/16/bin/node /usr/bin/node
+```
