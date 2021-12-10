@@ -49,10 +49,12 @@
         <p ref="text3Ref">Just scan the code to join a group or enter the shared invitation link.</p>
       </div>
     </section>
-    <section>
+    <section ref="footerRef" class="footer">
       <Center>
-        <NuxtLink v-if="!loggedIn" class="button big indigo" to="/login">Join Now</NuxtLink>
-        <NuxtLink v-else class="button big indigo" to="/dashboard">Dashboard</NuxtLink>
+        <div ref="footerButtonRef">
+          <NuxtLink v-if="!loggedIn" class="button big indigo" to="/login">Join Now</NuxtLink>
+          <NuxtLink v-else class="button big indigo" to="/dashboard">Dashboard</NuxtLink>
+        </div>
       </Center>
     </section>
   </main>
@@ -88,6 +90,9 @@ const info3Ref = ref(null);
 const image3Ref = ref(null);
 const heading3Ref = ref(null);
 const text3Ref = ref(null);
+
+const footerRef = ref(null);
+const footerButtonRef = ref(null);
 
 const { isLoggedIn } = useAuth();
 
@@ -141,6 +146,7 @@ onMounted(() => {
   gsap.from(image1Ref.value, {
     scrollTrigger: {
       trigger: info1Ref.value,
+      toggleActions: 'restart play reverse reset',
       start: 'top center',
       end: 'top 100px',
     },
@@ -151,7 +157,7 @@ onMounted(() => {
   gsap.to(heading1Ref.value, {
     scrollTrigger: {
       trigger: info1Ref.value,
-      start: 'center center',
+      start: 'center center+=100px',
       scrub: true,
     },
     y: -400,
@@ -160,7 +166,7 @@ onMounted(() => {
   gsap.to(text1Ref.value, {
     scrollTrigger: {
       trigger: info1Ref.value,
-      start: 'center center',
+      start: 'center center+=100px',
       scrub: true,
     },
     y: -300,
@@ -170,6 +176,7 @@ onMounted(() => {
   gsap.from(image2Ref.value, {
     scrollTrigger: {
       trigger: info2Ref.value,
+      toggleActions: 'restart play reverse reset',
       start: 'top center',
       end: 'top 100px',
     },
@@ -180,7 +187,7 @@ onMounted(() => {
   gsap.to(heading2Ref.value, {
     scrollTrigger: {
       trigger: info2Ref.value,
-      start: 'center center',
+      start: 'center center+=100px',
       scrub: true,
     },
     y: -400,
@@ -189,7 +196,7 @@ onMounted(() => {
   gsap.to(text2Ref.value, {
     scrollTrigger: {
       trigger: info2Ref.value,
-      start: 'center center',
+      start: 'center center+=100px',
       scrub: true,
     },
     y: -300,
@@ -199,6 +206,7 @@ onMounted(() => {
   gsap.from(image3Ref.value, {
     scrollTrigger: {
       trigger: info3Ref.value,
+      toggleActions: 'restart play reverse reset',
       start: 'top center',
       end: 'top 100px',
     },
@@ -209,7 +217,7 @@ onMounted(() => {
   gsap.to(heading3Ref.value, {
     scrollTrigger: {
       trigger: info3Ref.value,
-      start: 'center center',
+      start: 'center center+=100px',
       scrub: true,
     },
     y: -400,
@@ -218,10 +226,20 @@ onMounted(() => {
   gsap.to(text3Ref.value, {
     scrollTrigger: {
       trigger: info3Ref.value,
-      start: 'center center',
+      start: 'center center+=100px',
       scrub: true,
     },
     y: -300,
+  });
+
+  gsap.from(footerRef.value, {
+    scrollTrigger: {
+      trigger: footerButtonRef.value,
+      start: 'top bottom',
+      scrub: true,
+    },
+    y: -200,
+    scale: 0.5,
   });
 
 });
@@ -234,7 +252,9 @@ main {
 }
 
 section {
+  position: relative;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 .hero {
@@ -293,7 +313,9 @@ section {
     padding: 4rem;
 
     &.image {
+      position: relative;
       padding: 1rem;
+      overflow: hidden;
     }
 
     h3 {

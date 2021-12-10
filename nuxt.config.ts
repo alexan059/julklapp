@@ -31,7 +31,7 @@ export default defineNuxtConfig({
         PG_PASSWORD: process.env.PG_PASSWORD,
         PG_HOST: process.env.PG_HOST,
         PG_DATABASE: process.env.PG_DATABASE,
-        EMAIL_DEBUG: process.env.EMAIL_DEBUG || false,
+        ENABLE_SMTP: process.env.ENABLE_SMTP || false, // default disabled
         SMTP_HOST: process.env.SMTP_HOST,
         SMTP_USER: process.env.SMTP_USER,
         SMTP_PASS: process.env.SMTP_PASS,

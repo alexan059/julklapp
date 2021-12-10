@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer';
 export async function sendOTPMail(email, digits): Promise<boolean> {
     let transporter;
 
-    if (config.EMAIL_DEBUG) {
+    if (!config.ENABLE_SMTP) {
         console.log(digits);
 
         return true;
