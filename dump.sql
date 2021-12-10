@@ -11,7 +11,7 @@ SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
+SET check_PROCEDURE_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
@@ -42,13 +42,13 @@ DROP TABLE public.sessions;
 DROP SEQUENCE public.groups_id_seq;
 DROP TABLE public.groups;
 DROP TABLE public.group_users;
-DROP FUNCTION public.update_timestamp_column();
-DROP FUNCTION public.create_group_user_relation();
+DROP PROCEDURE public.update_timestamp_column();
+DROP PROCEDURE public.create_group_user_relation();
 --
--- Name: create_group_user_relation(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: create_group_user_relation(); Type: PROCEDURE; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.create_group_user_relation() RETURNS trigger
+CREATE PROCEDURE public.create_group_user_relation() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -61,13 +61,13 @@ END;
 $$;
 
 
-ALTER FUNCTION public.create_group_user_relation() OWNER TO postgres;
+ALTER PROCEDURE public.create_group_user_relation() OWNER TO postgres;
 
 --
--- Name: update_timestamp_column(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: update_timestamp_column(); Type: PROCEDURE; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.update_timestamp_column() RETURNS trigger
+CREATE PROCEDURE public.update_timestamp_column() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -80,7 +80,7 @@ END;
 $$;
 
 
-ALTER FUNCTION public.update_timestamp_column() OWNER TO postgres;
+ALTER PROCEDURE public.update_timestamp_column() OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -288,21 +288,21 @@ CREATE INDEX "IDX_session_expire" ON public.sessions USING btree (expire);
 -- Name: groups on_insert_group; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER on_insert_group AFTER INSERT ON public.groups FOR EACH ROW EXECUTE FUNCTION public.create_group_user_relation();
+CREATE TRIGGER on_insert_group AFTER INSERT ON public.groups FOR EACH ROW EXECUTE PROCEDURE public.create_group_user_relation();
 
 
 --
 -- Name: groups on_update_timestamp; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER on_update_timestamp BEFORE UPDATE ON public.groups FOR EACH ROW EXECUTE FUNCTION public.update_timestamp_column();
+CREATE TRIGGER on_update_timestamp BEFORE UPDATE ON public.groups FOR EACH ROW EXECUTE PROCEDURE public.update_timestamp_column();
 
 
 --
 -- Name: users on_update_timestamp; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER on_update_timestamp BEFORE UPDATE ON public.users FOR EACH ROW EXECUTE FUNCTION public.update_timestamp_column();
+CREATE TRIGGER on_update_timestamp BEFORE UPDATE ON public.users FOR EACH ROW EXECUTE PROCEDURE public.update_timestamp_column();
 
 
 --
