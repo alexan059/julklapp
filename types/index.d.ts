@@ -31,6 +31,7 @@ declare module '@nuxt/schema' {
 
     interface PrivateRuntimeConfig {
         ENVIRONMENT: string;
+        BASE_URL: string;
         SESSION_SECRET: string;
         PG_USER: string;
         PG_PASSWORD: string;

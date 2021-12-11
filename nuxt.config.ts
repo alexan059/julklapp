@@ -26,6 +26,7 @@ export default defineNuxtConfig({
     ],
     privateRuntimeConfig: {
         ENVIRONMENT: process.env.NODE_ENV || 'development',
+        BASE_URL: process.env.BASE_URL,
         SESSION_SECRET: process.env.SESSION_SECRET,
         PG_USER: process.env.PG_USER,
         PG_PASSWORD: process.env.PG_PASSWORD,

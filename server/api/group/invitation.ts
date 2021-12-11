@@ -1,3 +1,4 @@
+import config from '#config';
 import { SessionRequest } from '~/types';
 import { ServerResponse } from 'http';
 import { createError, sendError, useQuery } from 'h3';
@@ -11,7 +12,7 @@ export default async (req: SessionRequest, res: ServerResponse) => {
     switch (req.method) {
         case 'GET':
             const { uid } = await useQuery(req);
-            const url = 'http://localhost:3000/i/' + uid;
+            const url = `${ config.BASE_URL }/i/${ uid }`;
 
             return res.end(JSON.stringify({ url }));
         default:
