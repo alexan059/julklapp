@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "short_name": "",
+  "name": "JulklAPP - Gift your friends!",
+  "short_name": "JulklAPP",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "theme_color": "#5352ed",
+  "background_color": "#5352ed",
   "display": "standalone"
 }
