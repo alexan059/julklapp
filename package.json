@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "nuxi dev",
     "build": "nuxi build",
-    "start": "pm2 start ecosystem.config.js"
+    "start": "pm2 start ecosystem.config.js --env production"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

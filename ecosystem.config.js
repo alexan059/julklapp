@@ -1,10 +1,13 @@
 module.exports = {
     apps: [
         {
-            name: 'JulklAPP',
+            name: 'julklapp',
             exec_mode: 'cluster',
             instances: 'max',
-            script: './.output/server/index.mjs'
+            script: './.output/server/index.mjs',
+            env_production: {
+                NODE_ENV: 'production'
+            }
         }
     ]
 };
