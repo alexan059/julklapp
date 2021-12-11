@@ -2,12 +2,11 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 14.1 (Debian 14.1-1.pgdg110+1)
--- Dumped by pg_dump version 14.1 (Debian 14.1-1.pgdg110+1)
+-- Dumped from database version 9.5.25
+-- Dumped by pg_dump version 9.5.25
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
--- SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -44,6 +43,38 @@ DROP TABLE public.groups;
 DROP TABLE public.group_users;
 DROP FUNCTION public.update_timestamp_column();
 DROP FUNCTION public.create_group_user_relation();
+DROP EXTENSION plpgsql;
+DROP SCHEMA public;
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA public;
+
+
+-- ALTER SCHEMA public OWNER TO postgres;
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
 --
 -- Name: create_group_user_relation(); Type: FUNCTION; Schema: public; Owner: postgres
 --
@@ -61,7 +92,7 @@ END;
 $$;
 
 
-ALTER FUNCTION public.create_group_user_relation() OWNER TO postgres;
+-- ALTER FUNCTION public.create_group_user_relation() OWNER TO postgres;
 
 --
 -- Name: update_timestamp_column(); Type: FUNCTION; Schema: public; Owner: postgres
@@ -80,11 +111,11 @@ END;
 $$;
 
 
-ALTER FUNCTION public.update_timestamp_column() OWNER TO postgres;
+-- ALTER FUNCTION public.update_timestamp_column() OWNER TO postgres;
 
 SET default_tablespace = '';
 
--- SET default_table_access_method = heap;
+SET default_with_oids = false;
 
 --
 -- Name: group_users; Type: TABLE; Schema: public; Owner: postgres
@@ -96,7 +127,7 @@ CREATE TABLE public.group_users (
 );
 
 
-ALTER TABLE public.group_users OWNER TO postgres;
+-- ALTER TABLE public.group_users OWNER TO postgres;
 
 --
 -- Name: groups; Type: TABLE; Schema: public; Owner: postgres
@@ -107,14 +138,14 @@ CREATE TABLE public.groups (
     name character varying(255) NOT NULL,
     description text NOT NULL,
     owner_id integer NOT NULL,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
     is_closed boolean DEFAULT false NOT NULL,
     uid character varying(255) NOT NULL
 );
 
 
-ALTER TABLE public.groups OWNER TO postgres;
+-- ALTER TABLE public.groups OWNER TO postgres;
 
 --
 -- Name: groups_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -128,7 +159,7 @@ CREATE SEQUENCE public.groups_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.groups_id_seq OWNER TO postgres;
+-- ALTER TABLE public.groups_id_seq OWNER TO postgres;
 
 --
 -- Name: groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -148,7 +179,7 @@ CREATE TABLE public.sessions (
 );
 
 
-ALTER TABLE public.sessions OWNER TO postgres;
+-- ALTER TABLE public.sessions OWNER TO postgres;
 
 --
 -- Name: user_pairs; Type: TABLE; Schema: public; Owner: postgres
@@ -161,7 +192,7 @@ CREATE TABLE public.user_pairs (
 );
 
 
-ALTER TABLE public.user_pairs OWNER TO postgres;
+-- ALTER TABLE public.user_pairs OWNER TO postgres;
 
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
@@ -173,8 +204,8 @@ CREATE TABLE public.users (
     name character varying(255) DEFAULT ''::bpchar NOT NULL,
     role character varying(255) DEFAULT 'user'::bpchar NOT NULL,
     otp text DEFAULT NULL::bpchar,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
     email_confirmed boolean DEFAULT false NOT NULL,
     avatar character varying(255) DEFAULT '😀'::bpchar NOT NULL,
     item_like character varying(255) DEFAULT '❓'::bpchar NOT NULL,
@@ -182,7 +213,7 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO postgres;
+-- ALTER TABLE public.users OWNER TO postgres;
 
 --
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -196,7 +227,7 @@ CREATE SEQUENCE public.users_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.users_id_seq OWNER TO postgres;
+-- ALTER TABLE public.users_id_seq OWNER TO postgres;
 
 --
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -206,21 +237,21 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: groups id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.groups ALTER COLUMN id SET DEFAULT nextval('public.groups_id_seq'::regclass);
 
 
 --
--- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
--- Name: user_pairs giver_pair_constraint; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: giver_pair_constraint; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.user_pairs
@@ -228,7 +259,7 @@ ALTER TABLE ONLY public.user_pairs
 
 
 --
--- Name: group_users group_user_constraint; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: group_user_constraint; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.group_users
@@ -236,7 +267,7 @@ ALTER TABLE ONLY public.group_users
 
 
 --
--- Name: groups groups_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: groups_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.groups
@@ -244,7 +275,7 @@ ALTER TABLE ONLY public.groups
 
 
 --
--- Name: sessions session_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: session_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.sessions
@@ -252,7 +283,7 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- Name: user_pairs taker_pair_constraint; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: taker_pair_constraint; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.user_pairs
@@ -260,7 +291,7 @@ ALTER TABLE ONLY public.user_pairs
 
 
 --
--- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users
@@ -268,7 +299,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users
@@ -283,28 +314,28 @@ CREATE INDEX "IDX_session_expire" ON public.sessions USING btree (expire);
 
 
 --
--- Name: groups on_insert_group; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: on_insert_group; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
 CREATE TRIGGER on_insert_group AFTER INSERT ON public.groups FOR EACH ROW EXECUTE PROCEDURE public.create_group_user_relation();
 
 
 --
--- Name: groups on_update_timestamp; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: on_update_timestamp; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
 CREATE TRIGGER on_update_timestamp BEFORE UPDATE ON public.groups FOR EACH ROW EXECUTE PROCEDURE public.update_timestamp_column();
 
 
 --
--- Name: users on_update_timestamp; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: on_update_timestamp; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
 CREATE TRIGGER on_update_timestamp BEFORE UPDATE ON public.users FOR EACH ROW EXECUTE PROCEDURE public.update_timestamp_column();
 
 
 --
--- Name: group_users fk_group; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_group; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.group_users
@@ -312,7 +343,7 @@ ALTER TABLE ONLY public.group_users
 
 
 --
--- Name: user_pairs fk_group; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_group; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.user_pairs
@@ -320,7 +351,7 @@ ALTER TABLE ONLY public.user_pairs
 
 
 --
--- Name: group_users fk_user; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_user; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.group_users
@@ -328,7 +359,7 @@ ALTER TABLE ONLY public.group_users
 
 
 --
--- Name: user_pairs fk_user_giver; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_user_giver; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.user_pairs
@@ -336,7 +367,7 @@ ALTER TABLE ONLY public.user_pairs
 
 
 --
--- Name: groups fk_user_group; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_user_group; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.groups
@@ -344,11 +375,21 @@ ALTER TABLE ONLY public.groups
 
 
 --
--- Name: user_pairs fk_user_taker; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_user_taker; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.user_pairs
     ADD CONSTRAINT fk_user_taker FOREIGN KEY (user_taker_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
+--
+
+-- REVOKE ALL ON SCHEMA public FROM PUBLIC;
+-- REVOKE ALL ON SCHEMA public FROM postgres;
+-- GRANT ALL ON SCHEMA public TO postgres;
+-- GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
