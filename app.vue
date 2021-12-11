@@ -1,6 +1,15 @@
 <template>
-  <div id="snow"/>
-  <NuxtPage/>
+  <div>
+
+    <Html lang="en-US">
+      <Head>
+        <Title>JulklAPP - Gift your friends!</Title>
+      </Head>
+    </Html>
+
+    <div id="snow"/>
+    <NuxtPage/>
+  </div>
 </template>
 
 <script lang="ts" setup>

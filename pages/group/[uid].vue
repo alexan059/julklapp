@@ -2,7 +2,7 @@
   <transition name="fade" mode="out-in">
     <Loader v-if="pending"/>
     <div class="content" v-else>
-      <Title>{{ data.group.name }}</Title>
+      <Heading>{{ data.group.name }}</Heading>
       <ul class="actions">
         <li v-if="!data.group.is_closed">
           <Modal @show="onOpenModal" @hide="onCloseModal" ref="invitationModal">
@@ -11,7 +11,7 @@
               <transition name="fade" mode="out-in">
                 <Loader v-if="!invitationURL"/>
                 <div v-else class="invite-modal">
-                  <Title>Invite your friends</Title>
+                  <Heading>Invite your friends</Heading>
                   <p>Scan QR Code</p>
                   <QRCode :text="invitationURL"/>
                   <p>Or Copy Link (click)</p>

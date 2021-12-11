@@ -1,7 +1,7 @@
 <template>
   <FormSection @submit="onSubmit" :loading="state.loading" button-label="Create">
 
-    <Title>Create a new Group</Title>
+    <Heading>Create a new Group</Heading>
 
     <p>Choose a name for your group.</p>
 

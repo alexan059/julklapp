@@ -2,7 +2,7 @@
   <Modal ref="modal">
     <slot/>
     <template #body>
-      <Title><slot name="text"></slot></Title>
+      <Heading><slot name="text"></slot></Heading>
       <div class="actions">
         <Button @click="confirm" danger small><slot>Confirm</slot></Button>
         <Button @click="cancel" small>Cancel</Button>

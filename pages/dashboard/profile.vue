@@ -1,7 +1,7 @@
 <template>
   <FormSection @submit="onSubmit" :loading="state.loading" button-label="Update">
 
-    <Title>Profile</Title>
+    <Heading>Profile</Heading>
 
     <p>Edit your profile here. You can click on the emojis.</p>
 

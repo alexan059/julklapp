@@ -2,7 +2,7 @@
   <EmojiIcon class="avatar" @click="open" :char="state.char"/>
   <Modal ref="modal" :show-button="false">
     <template #body>
-      <Title v-if="props.caption" center>{{ props.caption }}</Title>
+      <Heading v-if="props.caption" center>{{ props.caption }}</Heading>
       <div class="list">
         <ul class="groups">
           <li v-for="group in groups"

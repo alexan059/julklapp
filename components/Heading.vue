@@ -7,11 +7,11 @@
 <script lang="ts" setup>
 import { toRefs } from 'vue';
 
-interface TitleProps {
+interface HeadingProps {
   center?: boolean;
 }
 
-const props = withDefaults(defineProps<TitleProps>(), { center: false });
+const props = withDefaults(defineProps<HeadingProps>(), { center: false });
 
 const { center } = toRefs(props);
 </script>
